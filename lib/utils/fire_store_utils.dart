@@ -248,7 +248,7 @@ class FireStoreUtils {
         if (value.docs.isNotEmpty) {
           Constant.currencyModel = CurrencyModel.fromJson(value.docs.first.data());
         } else {
-          Constant.currencyModel = CurrencyModel(id: "", code: "USD", decimalDigits: 2, isActive: true, name: "US Dollar", symbol: "\$", symbolAtRight: false);
+          Constant.currencyModel = CurrencyModel(id: "", code: "TND", decimalDigits: 3, isActive: true, name: "Tunisian Dinar", symbol: "د.ت", symbolAtRight: true);
         }
       });
 
