@@ -25,7 +25,7 @@ class EditProfileController extends GetxController {
     super.onInit();
   }
 
-  getData() async {
+  Future<void> getData() async {
     await FireStoreUtils.getUserProfile(FireStoreUtils.getCurrentUid()).then((value) {
       if (value != null) {
         userModel.value = value;
@@ -41,7 +41,7 @@ class EditProfileController extends GetxController {
     isLoading.value = false;
   }
 
-  saveData() async {
+  Future<void> saveData() async {
     ShowToastDialog.showLoader("Please wait".tr);
     if (Constant().hasValidUrl(profileImage.value) == false && profileImage.value.isNotEmpty) {
       profileImage.value = await Constant.uploadUserImageToFireStorage(

@@ -184,7 +184,7 @@ class WalletScreen extends StatelessWidget {
         });
   }
 
-  transactionCard(WalletController controller, themeChange, WalletTransactionModel transactionModel) {
+  Column transactionCard(WalletController controller, themeChange, WalletTransactionModel transactionModel) {
     return Column(
       children: [
         InkWell(

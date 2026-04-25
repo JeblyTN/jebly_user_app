@@ -353,7 +353,7 @@ class Constant {
     await launchUrl(launchUri);
   }
 
-  launchURL(Uri url) async {
+  Future<void> launchURL(Uri url) async {
     if (!await launchUrl(
       url,
       mode: LaunchMode.externalApplication,
@@ -458,7 +458,7 @@ class Constant {
     return "#${(orderId).substring(orderId.length - 10)}";
   }
 
-  static checkPermission({required BuildContext context, required Function() onTap}) async {
+  static Future<void> checkPermission({required BuildContext context, required Function() onTap}) async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();

@@ -17,7 +17,7 @@ class AdvertisementListController extends GetxController {
 
   RxList<AdvertisementModel> advertisementList = <AdvertisementModel>[].obs;
 
-  getAdvertisementList() async {
+  Future<void> getAdvertisementList() async {
     advertisementList.clear();
     List<VendorModel> allNearestRestaurant = <VendorModel>[];
     FireStoreUtils.getAllNearestRestaurant().listen((event) async {
@@ -34,7 +34,7 @@ class AdvertisementListController extends GetxController {
 
   RxList<FavouriteModel> favouriteList = <FavouriteModel>[].obs;
 
-  getFavouriteRestaurant() async {
+  Future<void> getFavouriteRestaurant() async {
     if (Constant.userModel != null) {
       await FireStoreUtils.getFavouriteRestaurant().then(
         (value) {

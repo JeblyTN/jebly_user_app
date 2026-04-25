@@ -313,7 +313,7 @@ class DineInScreen extends StatelessWidget {
         });
   }
 
-  titleView(DarkThemeProvider themeChange, String name, Function()? onPress) {
+  Row titleView(DarkThemeProvider themeChange, String name, Function()? onPress) {
     return Row(
       children: [
         Expanded(

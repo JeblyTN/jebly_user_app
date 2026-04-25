@@ -76,7 +76,7 @@ class OSMMapController extends GetxController {
     getCurrentLocation();
   }
 
-  getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     Position? location = await Utils.getCurrentLocation();
     LatLng latlng = LatLng(location?.latitude ?? 0.0, location?.longitude ?? 0.0);
     addLatLngOnly(LatLng(location?.latitude ?? 0.0, location?.longitude ?? 0.0));

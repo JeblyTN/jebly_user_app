@@ -32,7 +32,7 @@ class CustomDialogBox extends StatelessWidget {
     );
   }
 
-  contentBox(context) {
+  Container contentBox(context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return Container(
       padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),

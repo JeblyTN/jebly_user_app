@@ -16,7 +16,7 @@ class ReviewListController extends GetxController {
   Rx<VendorModel> vendorModel = VendorModel().obs;
   RxList<RatingModel> ratingList = <RatingModel>[].obs;
 
-  getArgument() {
+  void getArgument() {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       vendorModel.value = argumentData['vendorModel'];
@@ -25,7 +25,7 @@ class ReviewListController extends GetxController {
     isLoading.value = false;
   }
 
-  getAllReview() async {
+  Future<void> getAllReview() async {
     await FireStoreUtils.getVendorReviews(vendorModel.value.id.toString()).then(
       (value) {
         ratingList.value = value;

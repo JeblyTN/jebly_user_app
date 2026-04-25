@@ -15,14 +15,14 @@ class HistoryGiftCardController extends GetxController {
     super.onInit();
   }
 
-  getData() async {
+  Future<void> getData() async {
     await FireStoreUtils.getGiftHistory().then((value) {
       giftCardsOrderList.value = value;
     });
     isLoading.value = false;
   }
 
-  updateList(int index) {
+  void updateList(int index) {
     GiftCardsOrderModel giftCardsOrderModel = giftCardsOrderList[index];
     giftCardsOrderModel.isPasswordShow = giftCardsOrderModel.isPasswordShow == true ? false : true;
 

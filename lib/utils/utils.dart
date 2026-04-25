@@ -41,7 +41,7 @@ class Utils {
     return await Geolocator.getCurrentPosition();
   }
 
-  static redirectMap({required String name, required double latitude, required double longLatitude}) async {
+  static Future<void> redirectMap({required String name, required double latitude, required double longLatitude}) async {
     if (Constant.mapType == "google") {
       bool? isAvailable = await MapLauncher.isMapAvailable(MapType.google);
       if (isAvailable == true) {

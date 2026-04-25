@@ -25,7 +25,7 @@ class Preferences {
 
   static late SharedPreferences pref;
 
-  static initPref() async {
+  static Future<void> initPref() async {
     pref = await SharedPreferences.getInstance();
   }
 

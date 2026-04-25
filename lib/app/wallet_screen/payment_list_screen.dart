@@ -188,7 +188,7 @@ class PaymentListScreen extends StatelessWidget {
         });
   }
 
-  cardDecoration(WalletController controller, PaymentGateway value, themeChange, String image) {
+  Obx cardDecoration(WalletController controller, PaymentGateway value, themeChange, String image) {
     return Obx(
       () => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

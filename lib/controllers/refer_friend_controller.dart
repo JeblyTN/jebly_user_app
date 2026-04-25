@@ -14,7 +14,7 @@ class ReferFriendController extends GetxController {
     super.onInit();
   }
 
-  getData() async {
+  Future<void> getData() async {
     await FireStoreUtils.getReferralUserBy().then((value) {
       if (value != null) {
         referralModel.value = value;

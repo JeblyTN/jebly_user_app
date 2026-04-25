@@ -17,7 +17,7 @@ class DineInBookingController extends GetxController {
     super.onInit();
   }
 
-  getDineInBooking() async {
+  Future<void> getDineInBooking() async {
     await FireStoreUtils.getDineInBooking(true).then(
       (value) {
         featureList.value = value;

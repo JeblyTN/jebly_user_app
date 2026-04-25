@@ -46,7 +46,7 @@ class _OrangeMoneyScreenState extends State<OrangeMoneyScreen> {
 
   Timer? timer;
 
-  callTransaction() {
+  void callTransaction() {
     timer = Timer.periodic(const Duration(seconds: 3), (Timer t) {
       if (mounted) {
         transactionstatus(accessToken: widget.accessToken, amount: widget.amount, orderId: widget.orderId, payToken: widget.payToken).then((value) {
@@ -66,7 +66,7 @@ class _OrangeMoneyScreenState extends State<OrangeMoneyScreen> {
     });
   }
 
-  initController() {
+  void initController() {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))

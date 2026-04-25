@@ -48,7 +48,7 @@ class RateProductController extends GetxController {
   RxDouble productReviewSum = 0.0.obs;
   RxDouble productReviewCount = 0.0.obs;
 
-  getArgument() async {
+  Future<void> getArgument() async {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       orderModel.value = argumentData['orderModel'];
@@ -130,7 +130,7 @@ class RateProductController extends GetxController {
       productModel.value.reviewsCount = ((productReviewCount.value) + 1.0);
       log("reviewsCount :22:: ${productReviewSum.value}+${ratings.value} :: ${(productReviewSum.value + ratings.value)}");
       productModel.value.reviewsSum = (productReviewSum.value + ratings.value);
-      log("reviewsCount :33:: ${reviewProductAttributes}");
+      log("reviewsCount :33:: $reviewProductAttributes");
       productModel.value.reviewAttributes = reviewProductAttributes;
 
       log("reviewsCount :44:: ${vendorReviewCount.value}+1.0 :: ${((vendorReviewCount.value) + 1.0)}");

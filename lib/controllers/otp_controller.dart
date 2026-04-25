@@ -19,7 +19,7 @@ class OtpController extends GetxController {
     super.onInit();
   }
 
-  getArgument() async {
+  Future<void> getArgument() async {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       countryCode.value = argumentData['countryCode'];

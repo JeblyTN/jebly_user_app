@@ -1410,7 +1410,7 @@ class ProductListView extends StatelessWidget {
     );
   }
 
-  productDetailsBottomSheet(BuildContext context, ProductModel productModel) {
+  Future<dynamic> productDetailsBottomSheet(BuildContext context, ProductModel productModel) {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -1431,7 +1431,7 @@ class ProductListView extends StatelessWidget {
             ));
   }
 
-  infoDialog(RestaurantDetailsController controller, themeChange, ProductModel productModel) {
+  Dialog infoDialog(RestaurantDetailsController controller, themeChange, ProductModel productModel) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: const EdgeInsets.all(10),

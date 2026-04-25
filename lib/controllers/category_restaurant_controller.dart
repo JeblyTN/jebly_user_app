@@ -21,7 +21,7 @@ class CategoryRestaurantController extends GetxController {
   Rx<VendorCategoryModel> vendorCategoryModel = VendorCategoryModel().obs;
   RxList<VendorModel> allNearestRestaurant = <VendorModel>[].obs;
 
-  getArgument() async {
+  Future<void> getArgument() async {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       vendorCategoryModel.value = argumentData['vendorCategoryModel'];
@@ -52,7 +52,7 @@ class CategoryRestaurantController extends GetxController {
     });
   }
 
-  getZone() async {
+  Future<void> getZone() async {
     await FireStoreUtils.getZone().then((value) {
       if (value != null) {
         for (int i = 0; i < value.length; i++) {

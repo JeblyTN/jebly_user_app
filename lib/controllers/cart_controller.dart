@@ -829,7 +829,7 @@ class CartController extends GetxController {
           selectedPaymentMethod.value = PaymentGateway.xendit.name;
         }
         Stripe.publishableKey = stripeModel.value.clientpublishableKey.toString();
-        Stripe.merchantIdentifier = 'Foodie Customer';
+        Stripe.merchantIdentifier = 'Jebly Customer';
         Stripe.instance.applySettings();
         setRef();
 
@@ -868,7 +868,7 @@ class CartController extends GetxController {
                     primary: AppThemeData.primary300,
                   ),
                 ),
-                merchantDisplayName: 'Foodie'));
+                merchantDisplayName: 'Jebly'));
         ShowToastDialog.closeLoader();
         displayStripePaymentSheet(amount: amount);
       }
@@ -895,7 +895,7 @@ class CartController extends GetxController {
     }
   }
 
-  createStripeIntent({required String amount}) async {
+  Future<dynamic> createStripeIntent({required String amount}) async {
     try {
       Map<String, dynamic> body = {
         'amount': ((double.parse(amount) * 100).round()).toString(),
@@ -1235,7 +1235,7 @@ class CartController extends GetxController {
     var options = {
       'key': razorPayModel.value.razorpayKey,
       'amount': amount * 100,
-      'name': 'Foodie',
+      'name': 'Jebly',
       'order_id': orderId,
       "currency": "INR",
       'description': 'wallet Topup',
@@ -1432,7 +1432,7 @@ class CartController extends GetxController {
     }
   }
 
-  static reset() {
+  static void reset() {
     accessToken = '';
     payToken = '';
     orderId = '';

@@ -19,7 +19,7 @@ class ChangeLanguageController extends GetxController {
     super.onInit();
   }
 
-  getLanguage() async {
+  Future<void> getLanguage() async {
     await FireStoreUtils.fireStore.collection(CollectionName.settings).doc("languages").get().then((event) {
       if (event.exists) {
         List languageListTemp = event.data()!["list"];

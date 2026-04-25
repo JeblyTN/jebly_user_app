@@ -217,7 +217,7 @@ class ProfileScreen extends StatelessWidget {
                                           }),
                                     cardDecoration(themeChange, controller, "assets/icons/ic_share.svg", "Share app", () {
                                       Share.share(
-                                          '${'Check out Foodie, your ultimate food delivery application!'.tr} \n\n${'Google Play:'.tr} ${Constant.googlePlayLink} \n\n${'App Store:'.tr} ${Constant.appStoreLink}',
+                                          '${'Check out Jebly, your ultimate food delivery application!'.tr} \n\n${'Google Play:'.tr} ${Constant.googlePlayLink} \n\n${'App Store:'.tr} ${Constant.appStoreLink}',
                                           subject: 'Look what I made!'.tr);
                                     }),
                                     cardDecoration(themeChange, controller, "assets/icons/ic_rate.svg", "Rate the app", () {
@@ -494,7 +494,7 @@ class ProfileScreen extends StatelessWidget {
                     scale: 0.8,
                     child: CupertinoSwitch(
                       value: controller.isDarkModeSwitch.value,
-                      activeColor: AppThemeData.primary300,
+                      activeTrackColor: AppThemeData.primary300,
                       onChanged: (value) {
                         controller.isDarkModeSwitch.value = value;
                         if (controller.isDarkModeSwitch.value == true) {

@@ -38,7 +38,7 @@ class SignupController extends GetxController {
     super.onInit();
   }
 
-  getArgument() {
+  void getArgument() {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       type.value = argumentData['type'];

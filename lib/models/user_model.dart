@@ -67,7 +67,7 @@ class UserModel {
       this.subscriptionExpiryDate,
       this.subscriptionPlan});
 
-  fullName() {
+  String fullName() {
     return "${firstName ?? ''} ${lastName ?? ''}";
   }
 

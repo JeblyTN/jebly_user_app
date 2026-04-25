@@ -16,7 +16,7 @@ class DiscountRestaurantListController extends GetxController {
     super.onInit();
   }
 
-  getArgument() async {
+  Future<void> getArgument() async {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       vendorList.value = argumentData['vendorList'];

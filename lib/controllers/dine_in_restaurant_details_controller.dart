@@ -87,7 +87,7 @@ class DineInRestaurantDetailsController extends GetxController {
     }
   }
 
-  getRecord() {
+  void getRecord() {
     for (int i = 0; i < 7; i++) {
       final now = DateTime.now().add(Duration(days: i));
       var day = DateFormat('EEEE').format(now);
@@ -123,7 +123,7 @@ class DineInRestaurantDetailsController extends GetxController {
     }
   }
 
-  timeSet(Timestamp selectedDate) {
+  void timeSet(Timestamp selectedDate) {
     timeSlotList.clear();
 
     for (DateTime time = Constant.stringToDate(vendorModel.value.openDineTime.toString());
@@ -203,7 +203,7 @@ class DineInRestaurantDetailsController extends GetxController {
 
   Rx<VendorModel> vendorModel = VendorModel().obs;
 
-  getArgument() async {
+  Future<void> getArgument() async {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       vendorModel.value = argumentData['vendorModel'];
@@ -216,7 +216,7 @@ class DineInRestaurantDetailsController extends GetxController {
     update();
   }
 
-  getFavouriteList() async {
+  Future<void> getFavouriteList() async {
     if (Constant.userModel != null) {
       await FireStoreUtils.getFavouriteRestaurant().then(
         (value) {
@@ -235,7 +235,7 @@ class DineInRestaurantDetailsController extends GetxController {
 
   RxBool isOpen = false.obs;
 
-  statusCheck() {
+  void statusCheck() {
     final now = DateTime.now();
     var day = DateFormat('EEEE', 'en_US').format(now);
     var date = DateFormat('dd-MM-yyyy').format(now);

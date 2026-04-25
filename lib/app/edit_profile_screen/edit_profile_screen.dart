@@ -167,7 +167,7 @@ class EditProfileScreen extends StatelessWidget {
         });
   }
 
-  buildBottomSheet(BuildContext context, EditProfileController controller) {
+  Future<dynamic> buildBottomSheet(BuildContext context, EditProfileController controller) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {

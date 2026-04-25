@@ -218,7 +218,7 @@ class GiftCardScreen extends StatelessWidget {
         });
   }
 
-  giftCardBottomSheet(BuildContext context, GiftCardController controller) {
+  Future<dynamic> giftCardBottomSheet(BuildContext context, GiftCardController controller) {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,

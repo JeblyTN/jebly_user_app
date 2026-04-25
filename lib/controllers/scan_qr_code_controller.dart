@@ -12,7 +12,7 @@ class ScanQrCodeController extends GetxController {
 
   RxList<VendorModel> allNearestRestaurant = <VendorModel>[].obs;
 
-  getData() {
+  void getData() {
     FireStoreUtils.getAllNearestRestaurant().listen((event) async {
       allNearestRestaurant.addAll(event);
     });

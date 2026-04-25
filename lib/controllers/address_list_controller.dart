@@ -25,7 +25,7 @@ class AddressListController extends GetxController {
     super.onInit();
   }
 
-  clearData() {
+  void clearData() {
     shippingModel.value = ShippingAddress();
     houseBuildingTextEditingController.value.clear();
     localityEditingController.value.clear();
@@ -34,7 +34,7 @@ class AddressListController extends GetxController {
     selectedSaveAs.value = "Home";
   }
 
-  setData(ShippingAddress shippingAddress) {
+  void setData(ShippingAddress shippingAddress) {
     shippingModel.value = shippingAddress;
     houseBuildingTextEditingController.value.text = shippingAddress.address.toString();
     localityEditingController.value.text = shippingAddress.locality.toString();
@@ -43,7 +43,7 @@ class AddressListController extends GetxController {
     location.value = shippingAddress.location!;
   }
 
-  getUser() async {
+  Future<void> getUser() async {
     await FireStoreUtils.getUserProfile(FireStoreUtils.getCurrentUid()).then(
       (value) {
         if (value != null) {

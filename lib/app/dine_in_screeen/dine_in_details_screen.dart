@@ -730,7 +730,7 @@ class DineInDetailsScreen extends StatelessWidget {
         });
   }
 
-  timeShowBottomSheet(BuildContext context, DineInRestaurantDetailsController productModel) {
+  Future<dynamic> timeShowBottomSheet(BuildContext context, DineInRestaurantDetailsController productModel) {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,

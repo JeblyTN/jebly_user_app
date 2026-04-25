@@ -70,7 +70,7 @@ class GiftCardController extends GetxController {
   Rx<TextEditingController> messageController = TextEditingController().obs;
   Rx<UserModel> userModel = UserModel().obs;
 
-  getGiftCard() async {
+  Future<void> getGiftCard() async {
     await FireStoreUtils.getGiftCard().then((value) {
       giftCardList = value;
       if (giftCardList.isNotEmpty) {
@@ -178,7 +178,7 @@ class GiftCardController extends GetxController {
   Rx<OrangeMoney> orangeMoneyModel = OrangeMoney().obs;
   Rx<Xendit> xenditModel = Xendit().obs;
 
-  getPaymentSettings() async {
+  Future<void> getPaymentSettings() async {
     await FireStoreUtils.getPaymentSettingsData().then(
       (value) {
         payFastModel.value = PayFastModel.fromJson(jsonDecode(Preferences.getString(Preferences.payFastSettings)));
@@ -220,7 +220,7 @@ class GiftCardController extends GetxController {
           selectedPaymentMethod.value = PaymentGateway.xendit.name;
         }
         Stripe.publishableKey = stripeModel.value.clientpublishableKey.toString();
-        Stripe.merchantIdentifier = 'Foodie';
+        Stripe.merchantIdentifier = 'Jebly';
         Stripe.instance.applySettings();
         setRef();
 
@@ -321,7 +321,7 @@ class GiftCardController extends GetxController {
                     primary: AppThemeData.primary300,
                   ),
                 ),
-                merchantDisplayName: 'Foodie'));
+                merchantDisplayName: 'Jebly'));
         ShowToastDialog.closeLoader();
         displayStripePaymentSheet(amount: amount);
       }
@@ -331,7 +331,7 @@ class GiftCardController extends GetxController {
     }
   }
 
-  displayStripePaymentSheet({required String amount}) async {
+  Future<void> displayStripePaymentSheet({required String amount}) async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
         ShowToastDialog.showToast("Payment successfully".tr);
@@ -347,7 +347,7 @@ class GiftCardController extends GetxController {
     }
   }
 
-  createStripeIntent({required String amount}) async {
+  Future<dynamic> createStripeIntent({required String amount}) async {
     try {
       Map<String, dynamic> body = {
         'amount': ((double.parse(amount) * 100).round()).toString(),
@@ -373,7 +373,7 @@ class GiftCardController extends GetxController {
   }
 
   //mercadoo
-  mercadoPagoMakePayment({required BuildContext context, required String amount}) async {
+  Future<Null> mercadoPagoMakePayment({required BuildContext context, required String amount}) async {
     final headers = {
       'Authorization': 'Bearer ${mercadoPagoModel.value.accessToken}',
       'Content-Type': 'application/json',
@@ -454,7 +454,7 @@ class GiftCardController extends GetxController {
   }
 
   //flutter wave Payment Method
-  flutterWaveInitiatePayment({required BuildContext context, required String amount}) async {
+  Future<Null> flutterWaveInitiatePayment({required BuildContext context, required String amount}) async {
     ShowToastDialog.showLoader("Please wait".tr);
     final url = Uri.parse('https://api.flutterwave.com/v3/payments');
     final headers = {
@@ -501,7 +501,7 @@ class GiftCardController extends GetxController {
 
   String? _ref;
 
-  setRef() {
+  void setRef() {
     maths.Random numRef = maths.Random();
     int year = DateTime.now().year;
     int refNumber = numRef.nextInt(20000);
@@ -513,7 +513,7 @@ class GiftCardController extends GetxController {
   }
 
   // payFast
-  payFastPayment({required BuildContext context, required String amount}) {
+  void payFastPayment({required BuildContext context, required String amount}) {
     ShowToastDialog.showLoader("Please wait".tr);
     PayStackURLGen.getPayHTML(payFastSettingData: payFastModel.value, amount: amount.toString(), userModel: userModel.value).then((String? value) async {
       ShowToastDialog.closeLoader();
@@ -567,7 +567,7 @@ class GiftCardController extends GetxController {
   }
 
   ///Paytm payment function
-  getPaytmCheckSum(context, {required double amount}) async {
+  Future<void> getPaytmCheckSum(context, {required double amount}) async {
     final String orderId = DateTime.now().millisecondsSinceEpoch.toString();
     String getChecksum = "${Constant.globalUrl}payments/getpaytmchecksum";
 
@@ -687,7 +687,7 @@ class GiftCardController extends GetxController {
     var options = {
       'key': razorPayModel.value.razorpayKey,
       'amount': amount * 100,
-      'name': 'Foodie',
+      'name': 'Jebly',
       'order_id': orderId,
       "currency": "INR",
       'description': 'wallet Topup',
@@ -725,7 +725,7 @@ class GiftCardController extends GetxController {
   }
 
   //Midtrans payment
-  midtransMakePayment({required String amount, required BuildContext context}) async {
+  Future<void> midtransMakePayment({required String amount, required BuildContext context}) async {
     ShowToastDialog.showLoader("Please wait".tr);
     await createPaymentLink(amount: amount).then((url) {
       if (url != '') {
@@ -787,7 +787,7 @@ class GiftCardController extends GetxController {
   static String orderId = '';
   static String amount = '';
 
-  orangeMakePayment({required String amount, required BuildContext context}) async {
+  Future<void> orangeMakePayment({required String amount, required BuildContext context}) async {
     reset();
     var id = const Uuid().v4();
     ShowToastDialog.showLoader("Please wait".tr);
@@ -880,7 +880,7 @@ class GiftCardController extends GetxController {
     }
   }
 
-  static reset() {
+  static void reset() {
     accessToken = '';
     payToken = '';
     orderId = '';
@@ -888,7 +888,7 @@ class GiftCardController extends GetxController {
   }
 
   //XenditPayment
-  xenditPayment(context, amount) async {
+  Future<void> xenditPayment(context, amount) async {
     ShowToastDialog.showLoader("Please wait".tr);
     await createXenditInvoice(amount: amount).then((model) {
       ShowToastDialog.closeLoader();

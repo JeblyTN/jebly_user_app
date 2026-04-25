@@ -17,7 +17,7 @@ class OrderPlacingController extends GetxController {
 
   Rx<OrderModel> orderModel = OrderModel().obs;
 
-  getArgument() async {
+  Future<void> getArgument() async {
     DatabaseHelper.instance.deleteAllCartProducts();
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {

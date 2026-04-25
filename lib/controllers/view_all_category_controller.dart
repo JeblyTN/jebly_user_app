@@ -15,7 +15,7 @@ class ViewAllCategoryController extends GetxController {
     super.onInit();
   }
 
-  getCategoryData() async {
+  Future<void> getCategoryData() async {
     await FireStoreUtils.getVendorCategory().then(
       (value) {
         vendorCategoryModel.value = value;

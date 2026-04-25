@@ -43,7 +43,7 @@ class LocationPermissionScreen extends StatelessWidget {
                     style: TextStyle(color: themeChange.getThem() ? AppThemeData.grey200 : AppThemeData.grey900, fontSize: 22, fontFamily: AppThemeData.semiBold),
                   ),
                   Text(
-                    "To provide the best dining experience, allow Foodie to access your location.".tr,
+                    "To provide the best dining experience, allow Jebly to access your location.".tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: themeChange.getThem() ? AppThemeData.grey200 : AppThemeData.grey900, fontSize: 16, fontFamily: AppThemeData.bold),
                   ),
@@ -78,14 +78,20 @@ class LocationPermissionScreen extends StatelessWidget {
 
                             Get.offAll(const DashBoardScreen());
                           } catch (e) {
-                            await placemarkFromCoordinates(19.228825, 72.854118).then((valuePlaceMaker) {
-                              Placemark placeMark = valuePlaceMaker[0];
+                            try {
+                              await placemarkFromCoordinates(19.228825, 72.854118).then((valuePlaceMaker) {
+                                Placemark placeMark = valuePlaceMaker[0];
+                                addressModel.addressAs = "Home";
+                                addressModel.location = UserLocation(latitude: 19.228825, longitude: 72.854118);
+                                String currentLocation =
+                                    "${placeMark.name}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.administrativeArea}, ${placeMark.postalCode}, ${placeMark.country}";
+                                addressModel.locality = currentLocation;
+                              });
+                            } catch (_) {
                               addressModel.addressAs = "Home";
                               addressModel.location = UserLocation(latitude: 19.228825, longitude: 72.854118);
-                              String currentLocation =
-                                  "${placeMark.name}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.administrativeArea}, ${placeMark.postalCode}, ${placeMark.country}";
-                              addressModel.locality = currentLocation;
-                            });
+                              addressModel.locality = "Default Location";
+                            }
 
                             Constant.selectedLocation = addressModel;
                             ShowToastDialog.closeLoader();
@@ -152,14 +158,20 @@ class LocationPermissionScreen extends StatelessWidget {
                               });
                             }
                           } catch (e) {
-                            await placemarkFromCoordinates(19.228825, 72.854118).then((valuePlaceMaker) {
-                              Placemark placeMark = valuePlaceMaker[0];
+                            try {
+                              await placemarkFromCoordinates(19.228825, 72.854118).then((valuePlaceMaker) {
+                                Placemark placeMark = valuePlaceMaker[0];
+                                addressModel.addressAs = "Home";
+                                addressModel.location = UserLocation(latitude: 19.228825, longitude: 72.854118);
+                                String currentLocation =
+                                    "${placeMark.name}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.administrativeArea}, ${placeMark.postalCode}, ${placeMark.country}";
+                                addressModel.locality = currentLocation;
+                              });
+                            } catch (_) {
                               addressModel.addressAs = "Home";
                               addressModel.location = UserLocation(latitude: 19.228825, longitude: 72.854118);
-                              String currentLocation =
-                                  "${placeMark.name}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.administrativeArea}, ${placeMark.postalCode}, ${placeMark.country}";
-                              addressModel.locality = currentLocation;
-                            });
+                              addressModel.locality = "Default Location";
+                            }
 
                             Constant.selectedLocation = addressModel;
                             ShowToastDialog.closeLoader();

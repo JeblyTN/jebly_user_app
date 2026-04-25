@@ -270,7 +270,7 @@ class RateProductScreen extends StatelessWidget {
     );
   }
 
-  buildBottomSheet(BuildContext context, RateProductController controller) {
+  Future<dynamic> buildBottomSheet(BuildContext context, RateProductController controller) {
     return showModalBottomSheet(
         context: context,
         builder: (context) {

@@ -308,7 +308,7 @@ class AddressListScreen extends StatelessWidget {
     );
   }
 
-  addAddressBottomSheet(BuildContext context, AddressListController controller, {int? index}) {
+  Future<dynamic> addAddressBottomSheet(BuildContext context, AddressListController controller, {int? index}) {
     return showModalBottomSheet(
         context: context,
         isScrollControlled: true,

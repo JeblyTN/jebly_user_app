@@ -165,7 +165,7 @@ class DineInBookingScreen extends StatelessWidget {
         });
   }
 
-  itemView(DarkThemeProvider themeChange, BuildContext context, DineInBookingModel orderModel) {
+  InkWell itemView(DarkThemeProvider themeChange, BuildContext context, DineInBookingModel orderModel) {
     return InkWell(
       onTap: () {
         Get.to(const DineInBookingDetails(), arguments: {"bookingModel": orderModel});

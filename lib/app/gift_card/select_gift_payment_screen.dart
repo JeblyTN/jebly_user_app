@@ -231,7 +231,7 @@ class SelectGiftPaymentScreen extends StatelessWidget {
     );
   }
 
-  cardDecoration(GiftCardController controller, PaymentGateway value, themeChange, String image) {
+  Obx cardDecoration(GiftCardController controller, PaymentGateway value, themeChange, String image) {
     return Obx(
       () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 5),

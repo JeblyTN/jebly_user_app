@@ -32,7 +32,7 @@ class DineInController extends GetxController {
 
   RxList<FavouriteModel> favouriteList = <FavouriteModel>[].obs;
 
-  getData() async {
+  Future<void> getData() async {
     isLoading.value = true;
     await getZone();
     FireStoreUtils.getAllNearestRestaurant(isDining: true).listen((event) async {
@@ -59,7 +59,7 @@ class DineInController extends GetxController {
     isLoading.value = false;
   }
 
-  getCategory() async {
+  Future<void> getCategory() async {
     await FireStoreUtils.getHomeVendorCategory().then(
       (value) {
         vendorCategoryModel.value = value;
@@ -80,7 +80,7 @@ class DineInController extends GetxController {
     }
   }
 
-  getZone() async {
+  Future<void> getZone() async {
     await FireStoreUtils.getZone().then((value) {
       if (value != null) {
         for (int i = 0; i < value.length; i++) {
