@@ -24,10 +24,12 @@ class SplashScreen extends StatelessWidget {
                 ),
                 Text(
                   "Welcome to Jebly".tr,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black, fontSize: 28, fontFamily: AppThemeData.bold),
                 ),
                 Text(
                   "Your Favorite Food Delivered Fast!".tr,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black87),
                 ),
               ],
