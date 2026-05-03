@@ -1171,6 +1171,27 @@ class AllRestaurant extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            Positioned(
+                              left: 10,
+                              top: 10,
+                              child: Obx(() => controller.surgeActive.value
+                                  ? Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF7A800),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: const Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('⚡', style: TextStyle(fontSize: 11)),
+                                          SizedBox(width: 3),
+                                          Text('Surge', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white)),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox.shrink()),
+                            ),
                           ],
                         ),
                       ),

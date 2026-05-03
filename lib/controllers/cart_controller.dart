@@ -56,6 +56,11 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
+  // Surge pricing
+  RxBool surgeActive = false.obs;
+  RxDouble surgeMultiplier = 1.0.obs;
+  RxString surgeLabel = ''.obs;
+
   RxBool isCashbackApply = false.obs;
   Rx<CashbackModel> bestCashback = CashbackModel().obs;
 
@@ -104,11 +109,24 @@ class CartController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     selectedAddress.value = Constant.selectedLocation;
+    _initSurge();
     getPaymentSettings();
     getCartData();
     super.onInit();
+  }
+
+  void _initSurge() {
+    FireStoreUtils.fireStore.collection('surgeStatus').doc('current').snapshots().listen((doc) {
+      if (!doc.exists) return;
+      final data = doc.data() as Map<String, dynamic>;
+      final bool active = (data['active'] as bool?) ?? false;
+      final double mult = ((data['multiplier'] as num?) ?? 1.0).toDouble();
+      surgeActive.value = active;
+      surgeMultiplier.value = active ? mult : 1.0;
+      surgeLabel.value = active ? (data['labelFr'] ?? data['label'] ?? 'Forte demande') : '';
+      calculatePrice();
+    });
   }
 
   Future<void> getCartData() async {
@@ -337,8 +355,9 @@ class CartController extends GetxController {
     /// ---------------- TOTAL ----------------
     totalTaxAmount.value = productTaxAmount.value + orderTaxAmount.value + driverDeliveryTaxAmount.value + packagingTaxAmount.value + platformTaxAmount.value;
 
+    final double effectiveDelivery = deliveryCharges.value * surgeMultiplier.value;
     totalAmount.value =
-        (subTotal.value - totalDiscount) + totalTaxAmount.value + (isEnableFreeDeliveryByAdmin.value ? 0 : deliveryCharges.value) + deliveryTips.value + packagingCharge.value + platformFee.value;
+        (subTotal.value - totalDiscount) + totalTaxAmount.value + (isEnableFreeDeliveryByAdmin.value ? 0 : effectiveDelivery) + deliveryTips.value + packagingCharge.value + platformFee.value;
 
     getCashback();
   }
@@ -675,7 +694,11 @@ class CartController extends GetxController {
     orderModel.products = cartItem;
     orderModel.specialDiscount = specialDiscountMap;
     orderModel.couponCode = selectedCouponModel.value.code;
-    orderModel.deliveryCharge = deliveryCharges.value.toString();
+    orderModel.baseDeliveryFee = deliveryCharges.value.toString();
+    orderModel.deliveryCharge = (deliveryCharges.value * surgeMultiplier.value).toString();
+    if (surgeActive.value && surgeMultiplier.value > 1.0) {
+      orderModel.surgeMultiplier = surgeMultiplier.value;
+    }
     orderModel.tipAmount = deliveryTips.value.toString();
     orderModel.notes = reMarkController.value.text;
     orderModel.takeAway = selectedFoodType.value == "Delivery".tr ? false : true;

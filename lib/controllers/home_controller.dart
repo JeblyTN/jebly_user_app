@@ -47,11 +47,27 @@ class HomeController extends GetxController {
 
   StreamSubscription? _cartSubscription;
   StreamSubscription? _restaurantSubscription;
+  StreamSubscription? _surgeSubscription;
+
+  RxBool surgeActive = false.obs;
+  RxDouble surgeMultiplier = 1.0.obs;
 
   @override
   void onInit() {
     super.onInit();
+    _initSurge();
     getData();
+  }
+
+  void _initSurge() {
+    _surgeSubscription = FireStoreUtils.fireStore.collection('surgeStatus').doc('current').snapshots().listen((doc) {
+      if (!doc.exists) return;
+      final data = doc.data() as Map<String, dynamic>;
+      final bool active = (data['active'] as bool?) ?? false;
+      final double mult = ((data['multiplier'] as num?) ?? 1.0).toDouble();
+      surgeActive.value = active;
+      surgeMultiplier.value = active ? mult : 1.0;
+    });
   }
 
   Future<void> getData() async {
@@ -218,6 +234,7 @@ class HomeController extends GetxController {
   void onClose() {
     _cartSubscription?.cancel();
     _restaurantSubscription?.cancel();
+    _surgeSubscription?.cancel();
     super.onClose();
   }
 }

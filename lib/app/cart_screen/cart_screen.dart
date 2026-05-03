@@ -737,6 +737,34 @@ class CartScreen extends StatelessWidget {
 
                                       sectionDivider(themeChange.getThem()),
 
+                                      // Surge banner
+                                      if (controller.surgeActive.value && controller.selectedFoodType.value != 'TakeAway')
+                                        Container(
+                                          margin: const EdgeInsets.only(bottom: 8),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFFFF3CD),
+                                            borderRadius: BorderRadius.circular(8),
+                                            border: Border.all(color: const Color(0xFFF7A800)),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Text('⚡', style: TextStyle(fontSize: 16)),
+                                              const SizedBox(width: 6),
+                                              Expanded(
+                                                child: Text(
+                                                  '${controller.surgeLabel.value} — frais de livraison majorés (×${controller.surgeMultiplier.value.toStringAsFixed(1)})',
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Color(0xFF856404),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
                                       /// Delivery Fee
                                       if (controller.selectedFoodType.value != 'TakeAway')
                                         amountRow(
@@ -752,14 +780,38 @@ class CartScreen extends StatelessWidget {
                                                         fontSize: 16,
                                                       ),
                                                     )
-                                                  : Text(
-                                                      Constant.amountShow(amount: controller.deliveryCharges.value.toString()),
-                                                      style: TextStyle(
-                                                        fontFamily: AppThemeData.regular,
-                                                        color: themeChange.getThem() ? AppThemeData.grey50 : AppThemeData.grey900,
-                                                        fontSize: 16,
-                                                      ),
-                                                    ),
+                                                  : controller.surgeActive.value
+                                                      ? Row(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            Text(
+                                                              Constant.amountShow(amount: controller.deliveryCharges.value.toString()),
+                                                              style: TextStyle(
+                                                                fontFamily: AppThemeData.regular,
+                                                                fontSize: 13,
+                                                                color: themeChange.getThem() ? AppThemeData.grey400 : AppThemeData.grey500,
+                                                                decoration: TextDecoration.lineThrough,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(width: 6),
+                                                            Text(
+                                                              Constant.amountShow(amount: (controller.deliveryCharges.value * controller.surgeMultiplier.value).toStringAsFixed(3)),
+                                                              style: const TextStyle(
+                                                                fontFamily: AppThemeData.semiBold,
+                                                                fontSize: 16,
+                                                                color: Color(0xFFF7A800),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Text(
+                                                          Constant.amountShow(amount: controller.deliveryCharges.value.toString()),
+                                                          style: TextStyle(
+                                                            fontFamily: AppThemeData.regular,
+                                                            color: themeChange.getThem() ? AppThemeData.grey50 : AppThemeData.grey900,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
                                           amount: '',
                                         ),
 
