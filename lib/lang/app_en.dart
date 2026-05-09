@@ -536,5 +536,7 @@ const Map<String, String> enUS = {
   'Loading, please wait...': 'Loading, please wait...',
   'Unable to initialize payment, credentials are invalid or not authorized.Please check credentials, environment (sandbox/live), and account region.':
       'Unable to initialize payment, credentials are invalid or not authorized.Please check credentials, environment (sandbox/live), and account region.',
-  "This product doesn't have tax.": "This product doesn't have tax."
+  "This product doesn't have tax.": "This product doesn't have tax.",
+  'min': 'min',
+  'Prep Time': 'Prep Time',
 };

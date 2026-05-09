@@ -522,4 +522,6 @@ const Map<String, String> trFR = {
   "Please wait...": "Veuillez patienter...",
   "Loading, please wait...": "Chargement, veuillez patienter...",
   "Unable to initialize payment, credentials are invalid or not authorized.Please check credentials, environment (sandbox/live), and account region.": "Impossible d'initialiser le paiement, les identifiants sont invalides ou non autorisés.",
+  'min': 'min',
+  'Prep Time': 'Temps de préparation',
 };

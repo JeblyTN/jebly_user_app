@@ -232,9 +232,8 @@ class SignupScreen extends StatelessWidget {
                               ShowToastDialog.showToast("Please enter last name".tr);
                             } else if (controller.emailEditingController.value.text.trim().isEmpty) {
                               ShowToastDialog.showToast("Please enter valid email".tr);
-                            } else if (controller.phoneNUmberEditingController.value.text.trim().isEmpty) {
-                              ShowToastDialog.showToast("Please enter Phone number".tr);
                             } else {
+                              // [PHONE_AUTH_HIDDEN] Phone no longer required — field kept for profile data
                               controller.signUpWithEmailAndPassword();
                             }
                           } else {
@@ -244,8 +243,6 @@ class SignupScreen extends StatelessWidget {
                               ShowToastDialog.showToast("Please enter last name".tr);
                             } else if (controller.emailEditingController.value.text.trim().isEmpty) {
                               ShowToastDialog.showToast("Please enter valid email".tr);
-                            } else if (controller.phoneNUmberEditingController.value.text.trim().isEmpty) {
-                              ShowToastDialog.showToast("Please enter Phone number".tr);
                             } else if (controller.passwordEditingController.value.text.trim().length < 6) {
                               ShowToastDialog.showToast("Please enter minimum 6 characters password".tr);
                             } else if (controller.passwordEditingController.value.text.trim().isEmpty) {

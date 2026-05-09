@@ -510,14 +510,15 @@ class Constant {
         ..html = body;
 
       try {
-        final sendReport = await send(message, smtpServer);
+        final sendReport = await send(message, smtpServer).timeout(const Duration(seconds: 15));
         print('Message sent: $sendReport');
       } on MailerException catch (e) {
-        print(e);
-        print('Message not sent.');
+        print('Message not sent: $e');
         for (var p in e.problems) {
           print('Problem: ${p.code}: ${p.msg}');
         }
+      } catch (e) {
+        print('Email error (timeout or network): $e');
       }
     }
 

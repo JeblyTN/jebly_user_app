@@ -33,7 +33,8 @@ class Utils {
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
     }
 
     // When we reach here, permissions are granted and we can
@@ -41,7 +42,10 @@ class Utils {
     return await Geolocator.getCurrentPosition();
   }
 
-  static Future<void> redirectMap({required String name, required double latitude, required double longLatitude}) async {
+  static Future<void> redirectMap(
+      {required String name,
+      required double latitude,
+      required double longLatitude}) async {
     if (Constant.mapType == "google") {
       bool? isAvailable = await MapLauncher.isMapAvailable(MapType.google);
       if (isAvailable == true) {

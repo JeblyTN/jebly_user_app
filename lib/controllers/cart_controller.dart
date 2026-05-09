@@ -785,7 +785,7 @@ class CartController extends GetxController {
             }
           },
         );
-        await Constant.sendOrderEmail(orderModel: orderModel);
+        Constant.sendOrderEmail(orderModel: orderModel).catchError((_) {});
         ShowToastDialog.closeLoader();
         Get.off(const OrderPlacingScreen(), arguments: {"orderModel": orderModel});
       },
