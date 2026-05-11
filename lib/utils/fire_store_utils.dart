@@ -774,7 +774,7 @@ class FireStoreUtils {
   static Future<List<ProductModel>> getProductByVendorId(String vendorId) async {
     String selectedFoodType = Preferences.getString(Preferences.foodDeliveryType, defaultValue: "Delivery".tr);
     List<ProductModel> list = [];
-    if (selectedFoodType == "TakeAway") {
+    if (selectedFoodType == "TakeAway" || selectedFoodType == "TakeAway".tr) {
       await fireStore.collection(CollectionName.vendorProducts).where("vendorID", isEqualTo: vendorId).where('publish', isEqualTo: true).orderBy("createdAt", descending: false).get().then((value) {
         for (var element in value.docs) {
           ProductModel productModel = ProductModel.fromJson(element.data());

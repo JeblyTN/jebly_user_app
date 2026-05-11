@@ -207,23 +207,52 @@ class CartController extends GetxController {
 
     /// ---------------- DELIVERY CHARGES ----------------
     if (cartItem.isNotEmpty) {
-      if (selectedFoodType.value == "Delivery") {
-        totalDistance.value = double.parse(Constant.getDistance(
-          lat1: selectedAddress.value.location!.latitude.toString(),
-          lng1: selectedAddress.value.location!.longitude.toString(),
-          lat2: vendorModel.value.latitude.toString(),
-          lng2: vendorModel.value.longitude.toString(),
-        ));
+      if (selectedFoodType.value == "Delivery".tr || selectedFoodType.value == "Delivery") {
+        try {
+          final userLocation = selectedAddress.value.location;
+          final vendorLat = vendorModel.value.latitude;
+          final vendorLng = vendorModel.value.longitude;
+          if (userLocation != null && vendorLat != null && vendorLng != null) {
+            totalDistance.value = double.parse(Constant.getDistance(
+              lat1: userLocation.latitude.toString(),
+              lng1: userLocation.longitude.toString(),
+              lat2: vendorLat.toString(),
+              lng2: vendorLng.toString(),
+            ));
+          }
+        } catch (e) {
+          log('calculatePrice distance error: $e');
+        }
 
         if (vendorModel.value.isSelfDelivery == true && Constant.isSelfDeliveryFeature == true) {
           deliveryCharges.value = 0.0;
-        } else if (deliveryChargeModel.value.vendorCanModify == false) {
-          deliveryCharges.value = totalDistance.value > deliveryChargeModel.value.minimumDeliveryChargesWithinKm!
-              ? totalDistance.value * deliveryChargeModel.value.deliveryChargesPerKm!
-              : deliveryChargeModel.value.minimumDeliveryCharges!.toDouble();
         } else {
-          final charge = vendorModel.value.deliveryCharge ?? deliveryChargeModel.value;
-          deliveryCharges.value = totalDistance.value > charge.minimumDeliveryChargesWithinKm! ? totalDistance.value * charge.deliveryChargesPerKm! : charge.minimumDeliveryCharges!.toDouble();
+          final global = deliveryChargeModel.value;
+          final globalPerKm = (global.deliveryChargesPerKm ?? 0).toDouble();
+          final globalMinCharge = (global.minimumDeliveryCharges ?? 0).toDouble();
+          final globalMinWithinKm = (global.minimumDeliveryChargesWithinKm ?? 0).toDouble();
+
+          if (global.vendorCanModify == false) {
+            deliveryCharges.value = totalDistance.value > globalMinWithinKm
+                ? totalDistance.value * globalPerKm
+                : globalMinCharge;
+          } else {
+            final vendorCharge = vendorModel.value.deliveryCharge;
+            final perKm = (vendorCharge?.deliveryChargesPerKm ?? 0).toDouble();
+            final minCharge = (vendorCharge?.minimumDeliveryCharges ?? 0).toDouble();
+            final minWithinKm = (vendorCharge?.minimumDeliveryChargesWithinKm ?? 0).toDouble();
+
+            if (perKm > 0 || minCharge > 0) {
+              deliveryCharges.value = totalDistance.value > minWithinKm
+                  ? totalDistance.value * perKm
+                  : minCharge;
+            } else {
+              // Vendor charge is zero — fall back to global settings
+              deliveryCharges.value = totalDistance.value > globalMinWithinKm
+                  ? totalDistance.value * globalPerKm
+                  : globalMinCharge;
+            }
+          }
         }
       }
     }
@@ -323,7 +352,7 @@ class CartController extends GetxController {
     }
 
     /// ---------------- DELIVERY TAX ----------------
-    if (selectedFoodType.value != 'TakeAway' && vendorModel.value.isSelfDelivery != true) {
+    if (selectedFoodType.value != 'TakeAway' && selectedFoodType.value != 'TakeAway'.tr && vendorModel.value.isSelfDelivery != true) {
       for (var taxElement in Constant.driverDeliveryTaxList ?? []) {
         driverDeliveryTaxAmount.value += Constant.calculateTax(
           amount: deliveryCharges.value.toString(),
@@ -659,13 +688,12 @@ class CartController extends GetxController {
     ShowToastDialog.closeLoader();
     ShowToastDialog.showLoader("Please wait".tr);
     if ((Constant.isSubscriptionModelApplied == true || Constant.adminCommission?.isEnabled == true) && vendorModel.value.subscriptionPlan != null) {
-      await FireStoreUtils.getVendorById(vendorModel.value.id!).then((vender) async {
-        if (vender?.subscriptionTotalOrders == '0' || vender?.subscriptionTotalOrders == null) {
-          ShowToastDialog.closeLoader();
-          ShowToastDialog.showToast("This vendor has reached their maximum order capacity. Please select a different vendor or try again later.".tr);
-          return;
-        }
-      });
+      final vender = await FireStoreUtils.getVendorById(vendorModel.value.id!);
+      if (vender?.subscriptionTotalOrders == '0' || vender?.subscriptionTotalOrders == null) {
+        ShowToastDialog.closeLoader();
+        ShowToastDialog.showToast("This vendor has reached their maximum order capacity. Please select a different vendor or try again later.".tr);
+        return;
+      }
     }
 
     for (CartProductModel cartProduct in cartItem) {
@@ -772,24 +800,29 @@ class CartController extends GetxController {
       await FireStoreUtils.setCashbackRedeemModel(cashbackRedeemModel);
     }
 
-    await FireStoreUtils.setOrder(orderModel).then(
-      (value) async {
-        await FireStoreUtils.getUserProfile(orderModel.vendor!.author.toString()).then(
-          (value) async {
-            if (value != null) {
-              if (orderModel.scheduleTime != null) {
-                await SendNotification.sendFcmMessage(Constant.scheduleOrder, value.fcmToken ?? '', {});
-              } else {
-                await SendNotification.sendFcmMessage(Constant.newOrderPlaced, value.fcmToken ?? '', {});
-              }
-            }
-          },
-        );
-        Constant.sendOrderEmail(orderModel: orderModel).catchError((_) {});
-        ShowToastDialog.closeLoader();
-        Get.off(const OrderPlacingScreen(), arguments: {"orderModel": orderModel});
-      },
-    );
+    try {
+      await FireStoreUtils.setOrder(orderModel);
+    } catch (e) {
+      ShowToastDialog.closeLoader();
+      ShowToastDialog.showToast("Failed to place order, please try again.".tr);
+      return;
+    }
+
+    // Order saved — close loader and navigate immediately
+    ShowToastDialog.closeLoader();
+    Get.off(const OrderPlacingScreen(), arguments: {"orderModel": orderModel});
+
+    // Fire-and-forget: notifications and email are non-critical
+    Constant.sendOrderEmail(orderModel: orderModel).catchError((_) {});
+    FireStoreUtils.getUserProfile(orderModel.vendor!.author.toString()).then((vendorUser) {
+      if (vendorUser != null) {
+        if (orderModel.scheduleTime != null) {
+          SendNotification.sendFcmMessage(Constant.scheduleOrder, vendorUser.fcmToken ?? '', {});
+        } else {
+          SendNotification.sendFcmMessage(Constant.newOrderPlaced, vendorUser.fcmToken ?? '', {});
+        }
+      }
+    }).catchError((_) {});
   }
 
   Rx<WalletSettingModel> walletSettingModel = WalletSettingModel().obs;
