@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:customer/app/auth_screen/login_screen.dart';
 import 'package:customer/app/cart_screen/cart_screen.dart';
 import 'package:customer/app/dine_in_screeen/dine_in_details_screen.dart';
 import 'package:customer/app/review_list_screen/review_list_screen.dart';
@@ -1258,7 +1259,7 @@ class ProductListView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                controller.isOpen.value == false || Constant.userModel == null
+                                controller.isOpen.value == false
                                     ? const SizedBox()
                                     : Positioned(
                                         bottom: 10,
@@ -1272,6 +1273,29 @@ class ProductListView extends StatelessWidget {
                                                 color: themeChange.getThem() ? AppThemeData.grey900 : AppThemeData.grey50,
                                                 textColor: AppThemeData.primary300,
                                                 onPress: () async {
+                                                  if (Constant.userModel == null) {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        title: const Text('Connexion requise'),
+                                                        content: const Text('Vous devez vous connecter pour passer une commande.'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () => Navigator.pop(context),
+                                                            child: const Text('Annuler'),
+                                                          ),
+                                                          ElevatedButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(context);
+                                                              Get.to(const LoginScreen());
+                                                            },
+                                                            child: const Text('Se connecter'),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                    return;
+                                                  }
                                                   controller.selectedVariants.clear();
                                                   controller.selectedIndexVariants.clear();
                                                   controller.selectedIndexArray.clear();
@@ -1385,6 +1409,29 @@ class ProductListView extends StatelessWidget {
                                                         color: themeChange.getThem() ? AppThemeData.grey900 : AppThemeData.grey50,
                                                         textColor: AppThemeData.primary300,
                                                         onPress: () async {
+                                                          if (Constant.userModel == null) {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (context) => AlertDialog(
+                                                                title: const Text('Connexion requise'),
+                                                                content: const Text('Vous devez vous connecter pour passer une commande.'),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed: () => Navigator.pop(context),
+                                                                    child: const Text('Annuler'),
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    onPressed: () {
+                                                                      Navigator.pop(context);
+                                                                      Get.to(const LoginScreen());
+                                                                    },
+                                                                    child: const Text('Se connecter'),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                            return;
+                                                          }
                                                           if (1 <= (productModel.quantity ?? 0) || (productModel.quantity ?? 0) == -1) {
                                                             controller.addToCart(productModel: productModel, price: price, discountPrice: disPrice, isIncrement: true, quantity: 1);
                                                           } else {

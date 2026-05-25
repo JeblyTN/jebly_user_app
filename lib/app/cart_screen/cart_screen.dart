@@ -815,10 +815,8 @@ class CartScreen extends StatelessWidget {
                                           amount: '',
                                         ),
 
-                                      /// Delivery Tips
-                                      if (!(controller.selectedFoodType.value == 'TakeAway' ||
-                                          controller.isEnableFreeDeliveryByAdmin.value == true ||
-                                          (controller.vendorModel.value.isSelfDelivery == true && Constant.isSelfDeliveryFeature == true))) ...[
+                                      /// Delivery Tips - HIDDEN FOR JEBLY
+                                      if (false) ...[
                                         const SizedBox(height: 10),
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -906,8 +904,8 @@ class CartScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        ((controller.selectedFoodType.value == 'TakeAway' || (controller.vendorModel.value.isSelfDelivery == true && Constant.isSelfDeliveryFeature == true)) ||
-                                controller.isEnableFreeDeliveryByAdmin.value == true)
+                        // HIDDEN FOR JEBLY - tips disabled
+                        true
                             ? const SizedBox()
                             : Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
