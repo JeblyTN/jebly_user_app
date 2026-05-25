@@ -147,7 +147,7 @@ class CartController extends GetxController {
         calculatePrice();
       },
     );
-    selectedFoodType.value = Preferences.getString(Preferences.foodDeliveryType, defaultValue: "Delivery".tr);
+    selectedFoodType.value = "Delivery"; // JEBLY: TakeAway disabled, always Delivery
 
     await FireStoreUtils.getUserProfile(FireStoreUtils.getCurrentUid()).then(
       (value) {

@@ -1131,7 +1131,10 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     width: 14,
                   ),
-                  DropdownButton<String>(
+                  // JEBLY: TakeAway disabled — dropdown hidden
+                  Visibility(
+                    visible: false,
+                    child: DropdownButton<String>(
                     isDense: false,
                     underline: const SizedBox(),
                     value: controller.selectedOrderTypeValue.value.tr,
@@ -1189,7 +1192,8 @@ class HomeScreen extends StatelessWidget {
                             });
                       }
                     },
-                  )
+                  ),
+                  ), // end Visibility
                 ],
               ),
             ),

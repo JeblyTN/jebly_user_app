@@ -83,7 +83,7 @@ const Map<String, String> trFR = {
   "Remarks": "Remarques",
   "Write remarks for the restaurant": "Écrire des remarques pour le restaurant",
   "Pay Via": "Payer via",
-  "Pay Now": "Payer maintenant",
+  "Pay Now": "Payer",
   "Please select payment method": "Veuillez sélectionner le mode de paiement",
   "Tips Amount": "Montant du pourboire",
   "Enter Tips Amount": "Entrez le montant du pourboire",
