@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:badges/badges.dart' as badges;
@@ -1001,7 +1002,8 @@ class HomeScreen extends StatelessWidget {
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: Container(
+          // JEBLY: toolbar hidden
+          floatingActionButton: Visibility(visible: false, child: Container(
             decoration: BoxDecoration(
                 color: themeChange.getThem()
                     ? AppThemeData.grey800
@@ -1176,7 +1178,7 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          )), // end Visibility toolbar hidden
         );
       },
     );
@@ -1267,20 +1269,6 @@ class PopularRestaurant extends StatelessWidget {
                           children: [
                             RestaurantImageView(
                               vendorModel: vendorModel,
-                            ),
-                            Container(
-                              height: Responsive.height(20, context),
-                              width: Responsive.width(100, context),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: const Alignment(-0.00, -1.00),
-                                  end: const Alignment(0, 1),
-                                  colors: [
-                                    Colors.black.withOpacity(0),
-                                    const Color(0xFF111827)
-                                  ],
-                                ),
-                              ),
                             ),
                             Positioned(
                               right: 10,
@@ -1619,16 +1607,7 @@ class AllRestaurant extends StatelessWidget {
                               width: Responsive.width(100, context),
                               decoration: BoxDecoration(
                                 color: (isOpen) ? null : Colors.black38,
-                                gradient: (isOpen)
-                                    ? LinearGradient(
-                                        begin: const Alignment(-0.00, -1.00),
-                                        end: const Alignment(0, 1),
-                                        colors: [
-                                          Colors.black.withOpacity(0),
-                                          const Color(0xFF111827)
-                                        ],
-                                      )
-                                    : null,
+                                gradient: null,
                               ),
                               child: (isOpen)
                                   ? SizedBox()
@@ -2000,16 +1979,7 @@ class NewArrival extends StatelessWidget {
                             Container(
                               decoration: BoxDecoration(
                                 color: (isOpen) ? null : Colors.black38,
-                                gradient: (isOpen)
-                                    ? LinearGradient(
-                                        begin: const Alignment(0.00, 1.00),
-                                        end: const Alignment(0, -1),
-                                        colors: [
-                                          Colors.black.withOpacity(0),
-                                          AppThemeData.grey900
-                                        ],
-                                      )
-                                    : null,
+                                gradient: null,
                               ),
                               child: (isOpen)
                                   ? SizedBox()
@@ -2879,10 +2849,47 @@ class BannerBottomView extends StatelessWidget {
   }
 }
 
-class CategoryView extends StatelessWidget {
+class CategoryView extends StatefulWidget {
   final HomeController controller;
 
   const CategoryView({super.key, required this.controller});
+
+  @override
+  State<CategoryView> createState() => _CategoryViewState();
+}
+
+class _CategoryViewState extends State<CategoryView> {
+  final ScrollController _scrollController = ScrollController();
+  Timer? _scrollTimer;
+  bool _scrollForward = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startAutoScroll());
+  }
+
+  void _startAutoScroll() {
+    _scrollTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (!_scrollController.hasClients) return;
+      final max = _scrollController.position.maxScrollExtent;
+      if (max == 0) return;
+      final target = _scrollForward ? max : 0.0;
+      _scrollController.animateTo(
+        target,
+        duration: const Duration(seconds: 6),
+        curve: Curves.easeInOut,
+      );
+      _scrollForward = !_scrollForward;
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollTimer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -2890,12 +2897,13 @@ class CategoryView extends StatelessWidget {
     return SizedBox(
       height: 124,
       child: ListView.builder(
+        controller: _scrollController,
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.zero,
-        itemCount: controller.vendorCategoryModel.length,
+        itemCount: widget.controller.vendorCategoryModel.length,
         itemBuilder: (context, index) {
           VendorCategoryModel vendorCategoryModel =
-              controller.vendorCategoryModel[index];
+              widget.controller.vendorCategoryModel[index];
           return InkWell(
             onTap: () {
               Get.to(const CategoryRestaurantScreen(), arguments: {

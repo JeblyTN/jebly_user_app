@@ -31,8 +31,9 @@ class OnBoardingScreen extends StatelessWidget {
                                   ? "assets/images/image_2.png"
                                   : "assets/images/image_3.png"),
                           fit: BoxFit.cover)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  child: SafeArea(
+                    child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +108,8 @@ class OnBoardingScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
+                    ), // end Padding
+                  ), // end SafeArea
                 ),
         );
       },

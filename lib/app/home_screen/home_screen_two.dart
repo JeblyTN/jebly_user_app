@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:customer/app/address_screens/address_list_screen.dart';
 import 'package:customer/app/advertisement_screens/all_advertisement_screen.dart';
@@ -447,7 +448,8 @@ class HomeScreenTwo extends StatelessWidget {
                             ),
                     ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: Container(
+          // JEBLY: toolbar hidden
+          floatingActionButton: Visibility(visible: false, child: Container(
             decoration: BoxDecoration(color: themeChange.getThem() ? AppThemeData.grey800 : AppThemeData.grey100, borderRadius: const BorderRadius.all(Radius.circular(30))),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -583,17 +585,54 @@ class HomeScreenTwo extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          )), // end Visibility toolbar hidden
         );
       },
     );
   }
 }
 
-class CategoryView extends StatelessWidget {
+class CategoryView extends StatefulWidget {
   final HomeController controller;
 
   const CategoryView({super.key, required this.controller});
+
+  @override
+  State<CategoryView> createState() => _CategoryViewState();
+}
+
+class _CategoryViewState extends State<CategoryView> {
+  final ScrollController _scrollController = ScrollController();
+  Timer? _scrollTimer;
+  bool _scrollForward = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startAutoScroll());
+  }
+
+  void _startAutoScroll() {
+    _scrollTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (!_scrollController.hasClients) return;
+      final max = _scrollController.position.maxScrollExtent;
+      if (max == 0) return;
+      final target = _scrollForward ? max : 0.0;
+      _scrollController.animateTo(
+        target,
+        duration: const Duration(seconds: 6),
+        curve: Curves.easeInOut,
+      );
+      _scrollForward = !_scrollForward;
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollTimer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -601,18 +640,14 @@ class CategoryView extends StatelessWidget {
     return Container(
       decoration: ShapeDecoration(
         color: themeChange.getThem() ? AppThemeData.grey900 : AppThemeData.grey50,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               child: Column(
@@ -631,15 +666,13 @@ class CategoryView extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                          Get.to(const ViewAllCategoryScreen());
-                        },
+                        onTap: () => Get.to(const ViewAllCategoryScreen()),
                         child: Text(
                           "See all".tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: AppThemeData.medium,
-                            color: themeChange.getThem() ? AppThemeData.primary300 : AppThemeData.primary300,
+                            color: AppThemeData.primary300,
                             fontSize: 14,
                           ),
                         ),
@@ -648,34 +681,25 @@ class CategoryView extends StatelessWidget {
                   ),
                   GradientText(
                     'Best Servings Food'.tr,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: 'Inter Tight',
-                      fontWeight: FontWeight.w800,
-                    ),
-                    gradient: LinearGradient(colors: [
-                      Color(0xFF3961F1),
-                      Color(0xFF11D0EA),
-                    ]),
+                    style: const TextStyle(fontSize: 24, fontFamily: 'Inter Tight', fontWeight: FontWeight.w800),
+                    gradient: const LinearGradient(colors: [Color(0xFF3961F1), Color(0xFF11D0EA)]),
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             SizedBox(
               height: 100,
               child: ListView.builder(
+                controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                itemCount: controller.vendorCategoryModel.length,
+                itemCount: widget.controller.vendorCategoryModel.length,
                 itemBuilder: (context, index) {
-                  VendorCategoryModel vendorCategoryModel = controller.vendorCategoryModel[index];
+                  VendorCategoryModel vendorCategoryModel = widget.controller.vendorCategoryModel[index];
                   return InkWell(
-                    onTap: () {
-                      Get.to(const CategoryRestaurantScreen(), arguments: {"vendorCategoryModel": vendorCategoryModel, "dineIn": false});
-                    },
+                    onTap: () => Get.to(const CategoryRestaurantScreen(),
+                        arguments: {"vendorCategoryModel": vendorCategoryModel, "dineIn": false}),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: SizedBox(
@@ -1226,13 +1250,6 @@ class RestaurantView extends StatelessWidget {
                                   Container(
                                     height: Responsive.height(14, context),
                                     width: Responsive.width(30, context),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: const Alignment(-0.00, -1.00),
-                                        end: const Alignment(0, 1),
-                                        colors: [Colors.black.withOpacity(0), const Color(0xFF111827)],
-                                      ),
-                                    ),
                                   ),
                                   discountAmountTempList.isEmpty
                                       ? const SizedBox()

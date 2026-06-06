@@ -33,8 +33,9 @@ class LocationPermissionScreen extends StatelessWidget {
             width: Responsive.width(100, context),
             decoration:
                 BoxDecoration(image: DecorationImage(image: themeChange.getThem() ? AssetImage("assets/images/location_bg_dark.png") : AssetImage("assets/images/location_bg.png"), fit: BoxFit.cover)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 35),
+            child: SafeArea(
+              child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -208,6 +209,7 @@ class LocationPermissionScreen extends StatelessWidget {
                 ],
               ),
             ),
+            ), // end SafeArea
           ),
         );
       },

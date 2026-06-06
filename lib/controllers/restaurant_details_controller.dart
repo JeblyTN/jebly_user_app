@@ -108,14 +108,12 @@ class RestaurantDetailsController extends GetxController {
       }
     });
 
-    for (var element in productList) {
-      await FireStoreUtils.getVendorCategoryById(element.categoryID.toString()).then(
-        (value) {
-          if (value != null) {
-            vendorCategoryList.add(value);
-          }
-        },
-      );
+    // Fetch all categories in parallel instead of sequentially
+    final categoryResults = await Future.wait(
+      productList.map((element) => FireStoreUtils.getVendorCategoryById(element.categoryID.toString())),
+    );
+    for (final value in categoryResults) {
+      if (value != null) vendorCategoryList.add(value);
     }
     var seen = <String>{};
     vendorCategoryList.value = vendorCategoryList.where((element) => seen.add(element.id.toString())).toList();
@@ -151,23 +149,15 @@ class RestaurantDetailsController extends GetxController {
 
   Future<void> getFavouriteList() async {
     if (Constant.userModel != null) {
-      await FireStoreUtils.getFavouriteRestaurant().then(
-        (value) {
-          favouriteList.value = value;
-        },
-      );
-
-      await FireStoreUtils.getFavouriteItem().then(
-        (value) {
-          favouriteItemList.value = value;
-        },
-      );
-
-      await FireStoreUtils.getOfferByVendorId(vendorModel.value.id.toString()).then(
-        (value) {
-          couponList.value = value;
-        },
-      );
+      // Run all three in parallel
+      final results = await Future.wait([
+        FireStoreUtils.getFavouriteRestaurant(),
+        FireStoreUtils.getFavouriteItem(),
+        FireStoreUtils.getOfferByVendorId(vendorModel.value.id.toString()),
+      ]);
+      favouriteList.value = results[0] as List<FavouriteModel>;
+      favouriteItemList.value = results[1] as List<FavouriteItemModel>;
+      couponList.value = results[2] as List<CouponModel>;
     }
     await getAttributeData();
     update();
