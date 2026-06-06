@@ -12,23 +12,28 @@ class MaintenanceModeScreen extends StatelessWidget {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return Scaffold(
       backgroundColor: themeChange.getThem() ? AppThemeData.surfaceDark : AppThemeData.surface,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(child: Image.asset('assets/images/maintenance.png', height: 200, width: 200)),
-          const SizedBox(height: 20),
-          Text("We'll be back soon!".tr, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: themeChange.getThem() ? AppThemeData.grey100 : AppThemeData.grey800)),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
-              "Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back online shortly!".tr,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: themeChange.getThem() ? AppThemeData.grey100 : AppThemeData.grey800),
-            ),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(child: Image.asset('assets/images/maintenance.png', height: 200, width: 200)),
+              const SizedBox(height: 20),
+              Text("We'll be back soon!".tr, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: themeChange.getThem() ? AppThemeData.grey100 : AppThemeData.grey800)),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  "Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back online shortly!".tr,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: themeChange.getThem() ? AppThemeData.grey100 : AppThemeData.grey800),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

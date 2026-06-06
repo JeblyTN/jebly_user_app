@@ -54,6 +54,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../themes/text_field_widget.dart';
+import 'package:customer/widget/fade_in_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -538,39 +539,33 @@ class HomeScreen extends StatelessWidget {
                                           controller.storyList.isEmpty ||
                                                   Constant.storyEnable == false
                                               ? const SizedBox()
-                                              : Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 16),
-                                                  child: StoryView(
-                                                      controller: controller),
+                                              : FadeInWidget(
+                                                  delay: const Duration(milliseconds: 100),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    child: StoryView(controller: controller),
+                                                  ),
                                                 ),
                                           SizedBox(
                                             height: controller.storyList.isEmpty
                                                 ? 0
                                                 : 20,
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                titleView(themeChange,
-                                                    "Explore the Categories",
-                                                    () {
-                                                  Get.to(
-                                                      const ViewAllCategoryScreen());
-                                                }),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                CategoryView(
-                                                    controller: controller),
-                                              ],
+                                          FadeInWidget(
+                                            delay: const Duration(milliseconds: 200),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  titleView(themeChange, "Explore the Categories", () {
+                                                    Get.to(const ViewAllCategoryScreen());
+                                                  }),
+                                                  const SizedBox(height: 10),
+                                                  CategoryView(controller: controller),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(
@@ -578,51 +573,35 @@ class HomeScreen extends StatelessWidget {
                                           ),
                                           controller.bannerModel.isEmpty
                                               ? const SizedBox()
-                                              : Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 16),
-                                                  child: BannerView(
-                                                      controller: controller),
+                                              : FadeInWidget(
+                                                  delay: const Duration(milliseconds: 300),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    child: BannerView(controller: controller),
+                                                  ),
                                                 ),
                                           controller
                                                   .couponRestaurantList.isEmpty
                                               ? const SizedBox()
-                                              : Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 16),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      titleView(
-                                                          themeChange,
-                                                          "Largest Discounts"
-                                                              .tr, () {
-                                                        Get.to(
-                                                            const DiscountRestaurantListScreen(),
-                                                            arguments: {
-                                                              "vendorList":
-                                                                  controller
-                                                                      .couponRestaurantList,
-                                                              "couponList":
-                                                                  controller
-                                                                      .couponList,
-                                                              "title":
-                                                                  "Discounts Restaurants"
-                                                            });
-                                                      }),
-                                                      const SizedBox(
-                                                        height: 16,
-                                                      ),
-                                                      OfferView(
-                                                          controller:
-                                                              controller),
-                                                    ],
+                                              : FadeInWidget(
+                                                  delay: const Duration(milliseconds: 350),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        titleView(themeChange, "Largest Discounts".tr, () {
+                                                          Get.to(const DiscountRestaurantListScreen(), arguments: {
+                                                            "vendorList": controller.couponRestaurantList,
+                                                            "couponList": controller.couponList,
+                                                            "title": "Discounts Restaurants"
+                                                          });
+                                                        }),
+                                                        const SizedBox(height: 16),
+                                                        OfferView(controller: controller),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                           const SizedBox(
@@ -996,14 +975,14 @@ class HomeScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 20),
-                                            child: controller.isPopular.value
-                                                ? PopularRestaurant(
-                                                    controller: controller)
-                                                : AllRestaurant(
-                                                    controller: controller),
+                                          FadeInWidget(
+                                            delay: const Duration(milliseconds: 450),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                                              child: controller.isPopular.value
+                                                  ? PopularRestaurant(controller: controller)
+                                                  : AllRestaurant(controller: controller),
+                                            ),
                                           ),
                                           // controller.isPopular.value
                                           //     ? PopularRestaurant(

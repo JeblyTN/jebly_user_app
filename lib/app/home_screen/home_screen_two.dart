@@ -46,6 +46,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'discount_restaurant_list_screen.dart';
+import 'package:customer/widget/fade_in_widget.dart';
 
 class HomeScreenTwo extends StatelessWidget {
   const HomeScreenTwo({super.key});
@@ -313,41 +314,47 @@ class HomeScreenTwo extends StatelessWidget {
                                       children: [
                                         controller.bannerModel.isEmpty
                                             ? const SizedBox()
-                                            : Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                child: BannerView(controller: controller),
+                                            : FadeInWidget(
+                                                delay: const Duration(milliseconds: 100),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                  child: BannerView(controller: controller),
+                                                ),
                                               ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                                          child: CategoryView(controller: controller),
+                                        const SizedBox(height: 20),
+                                        FadeInWidget(
+                                          delay: const Duration(milliseconds: 200),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                                            child: CategoryView(controller: controller),
+                                          ),
                                         ),
                                         controller.couponRestaurantList.isEmpty
                                             ? const SizedBox()
-                                            : Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                child: Column(
-                                                  children: [
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    OfferView(controller: controller),
-                                                  ],
+                                            : FadeInWidget(
+                                                delay: const Duration(milliseconds: 300),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                  child: Column(
+                                                    children: [
+                                                      const SizedBox(height: 20),
+                                                      OfferView(controller: controller),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                         controller.storyList.isEmpty || Constant.storyEnable == false
                                             ? const SizedBox()
-                                            : Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                child: Column(
-                                                  children: [
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    StoryView(controller: controller),
-                                                  ],
+                                            : FadeInWidget(
+                                                delay: const Duration(milliseconds: 350),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                  child: Column(
+                                                    children: [
+                                                      const SizedBox(height: 20),
+                                                      StoryView(controller: controller),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                         Visibility(
@@ -423,15 +430,14 @@ class HomeScreenTwo extends StatelessWidget {
                                         ),
                                         controller.allNearestRestaurant.isEmpty
                                             ? const SizedBox()
-                                            : Column(
-                                                children: [
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  RestaurantView(
-                                                    controller: controller,
-                                                  ),
-                                                ],
+                                            : FadeInWidget(
+                                                delay: const Duration(milliseconds: 450),
+                                                child: Column(
+                                                  children: [
+                                                    const SizedBox(height: 20),
+                                                    RestaurantView(controller: controller),
+                                                  ],
+                                                ),
                                               ),
                                       ],
                                     ),
@@ -658,40 +664,51 @@ class CategoryView extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            GridView.builder(
-              padding: EdgeInsets.zero,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, childAspectRatio: 5 / 6),
-              itemCount: controller.vendorCategoryModel.length >= 8 ? 8 : controller.vendorCategoryModel.length,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                VendorCategoryModel vendorCategoryModel = controller.vendorCategoryModel[index];
-                return InkWell(
-                  onTap: () {
-                    Get.to(const CategoryRestaurantScreen(), arguments: {"vendorCategoryModel": vendorCategoryModel, "dineIn": false});
-                  },
-                  child: Column(
-                    children: [
-                      ClipOval(
-                        child: SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: NetworkImageWidget(imageUrl: vendorCategoryModel.photo.toString(), fit: BoxFit.cover),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                itemCount: controller.vendorCategoryModel.length,
+                itemBuilder: (context, index) {
+                  VendorCategoryModel vendorCategoryModel = controller.vendorCategoryModel[index];
+                  return InkWell(
+                    onTap: () {
+                      Get.to(const CategoryRestaurantScreen(), arguments: {"vendorCategoryModel": vendorCategoryModel, "dineIn": false});
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: SizedBox(
+                        width: 68,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ClipOval(
+                              child: SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: NetworkImageWidget(imageUrl: vendorCategoryModel.photo.toString(), fit: BoxFit.cover),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              "${vendorCategoryModel.title}",
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: AppThemeData.medium,
+                                color: themeChange.getThem() ? AppThemeData.grey50 : AppThemeData.grey900,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        "${vendorCategoryModel.title}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: AppThemeData.medium,
-                          color: themeChange.getThem() ? AppThemeData.grey50 : AppThemeData.grey900,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

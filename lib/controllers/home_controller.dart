@@ -30,6 +30,9 @@ class HomeController extends GetxController {
   final RxInt currentPage = 0.obs;
   final RxInt currentBottomPage = 0.obs;
 
+  Timer? _bannerTimer;
+  Timer? _bannerBottomTimer;
+
   late TabController tabController;
 
   // 🔹 Caching & reactive data
@@ -202,6 +205,8 @@ class HomeController extends GetxController {
     bannerModel.assignAll(results[1] as List<BannerModel>);
     bannerBottomModel.assignAll(results[2] as List<BannerModel>);
 
+    _startBannerTimers();
+
     await getFavouriteRestaurant();
   }
 
@@ -230,8 +235,41 @@ class HomeController extends GetxController {
     }
   }
 
+  void _startBannerTimers() {
+    _bannerTimer?.cancel();
+    _bannerBottomTimer?.cancel();
+
+    if (bannerModel.length > 1) {
+      _bannerTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+        if (pageController.value.hasClients) {
+          final next = (currentPage.value + 1) % bannerModel.length;
+          pageController.value.animateToPage(
+            next,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+
+    if (bannerBottomModel.length > 1) {
+      _bannerBottomTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+        if (pageBottomController.value.hasClients) {
+          final next = (currentBottomPage.value + 1) % bannerBottomModel.length;
+          pageBottomController.value.animateToPage(
+            next,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
   @override
   void onClose() {
+    _bannerTimer?.cancel();
+    _bannerBottomTimer?.cancel();
     _cartSubscription?.cancel();
     _restaurantSubscription?.cancel();
     _surgeSubscription?.cancel();

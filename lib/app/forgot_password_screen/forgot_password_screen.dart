@@ -22,7 +22,8 @@ class ForgotPasswordScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: themeChange.getThem() ? AppThemeData.surfaceDark : AppThemeData.surface,
             ),
-            body: Padding(
+            body: SingleChildScrollView(
+              child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,6 +71,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
             ),
           );
         });
