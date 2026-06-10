@@ -76,8 +76,8 @@ class LoginController extends GetxController {
     ShowToastDialog.showLoader("please wait...".tr);
     await signInWithGoogle().then((value) async {
       ShowToastDialog.closeLoader();
-      if (value != null) {
-        if (value.additionalUserInfo!.isNewUser) {
+      if (value == null) return;
+      if (value.additionalUserInfo!.isNewUser) {
           UserModel userModel = UserModel();
           userModel.id = value.user!.uid;
           userModel.email = value.user!.email;
@@ -132,7 +132,6 @@ class LoginController extends GetxController {
             }
           });
         }
-      }
     });
   }
 
@@ -203,11 +202,16 @@ class LoginController extends GetxController {
     });
   }
 
+  bool _googleSignInInitialized = false;
+
   Future<UserCredential?> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
-      await googleSignIn.initialize();
+      if (!_googleSignInInitialized) {
+        await googleSignIn.initialize();
+        _googleSignInInitialized = true;
+      }
 
       final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
       if (googleUser.id.isEmpty) return null;
@@ -228,6 +232,12 @@ class LoginController extends GetxController {
 
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
+      if (googleAuth.idToken == null) {
+        ShowToastDialog.closeLoader();
+        ShowToastDialog.showToast("Google Sign-In failed: missing credentials. Please contact support.".tr);
+        return null;
+      }
+
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
@@ -235,7 +245,9 @@ class LoginController extends GetxController {
 
       return userCredential;
     } catch (e) {
-      print("Google Sign-In Error: $e");
+      log("Google Sign-In Error: $e");
+      ShowToastDialog.closeLoader();
+      ShowToastDialog.showToast("Google Sign-In failed. Please try again.".tr);
       return null;
     }
   }

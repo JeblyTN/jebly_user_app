@@ -729,7 +729,7 @@ class CartController extends GetxController {
     }
     orderModel.tipAmount = deliveryTips.value.toString();
     orderModel.notes = reMarkController.value.text;
-    orderModel.takeAway = selectedFoodType.value == "Delivery".tr ? false : true;
+    orderModel.takeAway = selectedFoodType.value == "TakeAway" || selectedFoodType.value == "TakeAway".tr;
     orderModel.createdAt = Timestamp.now();
     orderModel.scheduleTime = deliveryType.value == "schedule".tr ? Timestamp.fromDate(scheduleDateTime.value) : null;
     orderModel.cashback = bestCashback.value.id == null ? null : bestCashback.value;

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:customer/app/auth_screen/phone_number_screen.dart';
 import 'package:customer/app/auth_screen/signup_screen.dart';
 import 'package:customer/app/dash_board_screens/dash_board_screen.dart';
@@ -12,7 +10,6 @@ import 'package:customer/themes/app_them_data.dart';
 import 'package:customer/themes/round_button_fill.dart';
 import 'package:customer/themes/text_field_widget.dart';
 import 'package:customer/utils/dark_theme_provider.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
@@ -203,82 +200,34 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // [GOOGLE_AUTH_HIDDEN] Remove Offstage wrapper to re-enable Google/Apple login
-                    Offstage(
-                      offstage: true,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: RoundedButtonFill(
-                              title: Platform.isIOS ? "with Google".tr : "Continue with Google".tr,
-                              textColor: themeChange.getThem() ? AppThemeData.grey100 : AppThemeData.grey900,
-                              color: themeChange.getThem() ? AppThemeData.grey900 : AppThemeData.grey100,
-                              icon: SvgPicture.asset("assets/icons/ic_google.svg"),
-                              isRight: false,
-                              onPress: () async {
-                                controller.loginWithGoogle();
-                              },
-                            ),
-                          ),
-                          if (Platform.isIOS)
-                            const SizedBox(width: 10),
-                          Platform.isIOS
-                              ? Expanded(
-                                  child: RoundedButtonFill(
-                                    title: "with Apple".tr,
-                                    textColor: themeChange.getThem() ? AppThemeData.grey100 : AppThemeData.grey900,
-                                    color: themeChange.getThem() ? AppThemeData.grey900 : AppThemeData.grey100,
-                                    icon: SvgPicture.asset("assets/icons/ic_apple.svg"),
-                                    isRight: false,
-                                    onPress: () async {
-                                      controller.loginWithApple();
-                                    },
-                                  ),
-                                )
-                              : const SizedBox(),
-                        ],
+                    RoundedButtonFill(
+                      title: "Continue with Google".tr,
+                      textColor: themeChange.getThem() ? AppThemeData.grey100 : AppThemeData.grey900,
+                      color: themeChange.getThem() ? AppThemeData.grey900 : AppThemeData.grey100,
+                      icon: SvgPicture.asset("assets/icons/ic_google.svg"),
+                      isRight: false,
+                      onPress: () async {
+                        controller.loginWithGoogle();
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppThemeData.primary300, width: 1.5),
+                        borderRadius: BorderRadius.circular(200),
+                      ),
+                      child: RoundedButtonFill(
+                        title: "Signup".tr,
+                        color: Colors.transparent,
+                        textColor: AppThemeData.primary300,
+                        onPress: () {
+                          Get.to(const SignupScreen());
+                        },
                       ),
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
-              ),
-            ),
-            bottomNavigationBar: Padding(
-              padding: EdgeInsets.symmetric(vertical: Platform.isAndroid ? 10 : 30),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                            text: 'Didn’t have an account?'.tr,
-                            style: TextStyle(
-                              color: themeChange.getThem() ? AppThemeData.grey50 : AppThemeData.grey900,
-                              fontFamily: AppThemeData.medium,
-                              fontWeight: FontWeight.w500,
-                            )),
-                        const WidgetSpan(
-                          child: SizedBox(
-                            width: 10,
-                          ),
-                        ),
-                        TextSpan(
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Get.to(const SignupScreen());
-                              },
-                            text: 'Sign up'.tr,
-                            style: TextStyle(
-                                color: AppThemeData.primary300,
-                                fontFamily: AppThemeData.bold,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppThemeData.primary300)),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ),
           );
