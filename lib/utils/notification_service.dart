@@ -89,7 +89,9 @@ class NotificationService {
 
   static Future<String?>? getToken() async {
     try {
-      String? token = await FirebaseMessaging.instance.getToken();
+      String? token = await FirebaseMessaging.instance
+          .getToken()
+          .timeout(const Duration(seconds: 10), onTimeout: () => null);
       return token;
     } catch (e) {
       return null;
