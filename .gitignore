@@ -25,5 +25,4 @@ android/app/src/main/res/values/strings.xml
 android/local.properties
 android/key.properties
 android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
 *~
