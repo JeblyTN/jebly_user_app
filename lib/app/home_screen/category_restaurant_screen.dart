@@ -95,13 +95,6 @@ class CategoryRestaurantScreen extends StatelessWidget {
                                                   width: Responsive.width(100, context),
                                                   decoration: BoxDecoration(
                                                     color: (isOpen) ? null : Colors.black38,
-                                                    gradient: (isOpen)
-                                                        ? LinearGradient(
-                                                            begin: const Alignment(-0.00, -1.00),
-                                                            end: const Alignment(0, 1),
-                                                            colors: [Colors.black.withOpacity(0), const Color(0xFF111827)],
-                                                          )
-                                                        : null,
                                                   ),
                                                   child: (isOpen)
                                                       ? SizedBox()

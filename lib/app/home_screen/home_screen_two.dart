@@ -845,15 +845,6 @@ class OfferView extends StatelessWidget {
                                     height: Responsive.height(100, context),
                                     width: Responsive.width(100, context),
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: const Alignment(-0.00, -1.00),
-                                        end: const Alignment(0, 1),
-                                        colors: [Colors.black.withOpacity(0), AppThemeData.grey900],
-                                      ),
-                                    ),
-                                  ),
                                   Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Padding(
@@ -1056,9 +1047,6 @@ class StoryView extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 height: Responsive.height(100, context),
                                 width: Responsive.width(100, context),
-                              ),
-                              Container(
-                                color: Colors.black.withOpacity(0.30),
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),

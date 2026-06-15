@@ -200,17 +200,6 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                       width: Responsive.width(100, context),
                                       height: Responsive.height(40, context),
                                     ),
-                                    Container(
-                                      width: Responsive.width(100, context),
-                                      height: Responsive.height(40, context),
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          begin: const Alignment(0.00, -1.00),
-                                          end: const Alignment(0, 1),
-                                          colors: [Colors.black.withOpacity(0), Colors.black],
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 )
                               : PageView.builder(
@@ -230,17 +219,6 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                           fit: BoxFit.cover,
                                           width: Responsive.width(100, context),
                                           height: Responsive.height(40, context),
-                                        ),
-                                        Container(
-                                          width: Responsive.width(100, context),
-                                          height: Responsive.height(40, context),
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              begin: const Alignment(0.00, -1.00),
-                                              end: const Alignment(0, 1),
-                                              colors: [Colors.black.withOpacity(0), Colors.black],
-                                            ),
-                                          ),
                                         ),
                                       ],
                                     );
@@ -1219,17 +1197,6 @@ class ProductListView extends StatelessWidget {
                                   height: Responsive.height(16, context),
                                   width: Responsive.width(34, context),
                                 ),
-                                Container(
-                                  height: Responsive.height(16, context),
-                                  width: Responsive.width(34, context),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: const Alignment(-0.00, -1.00),
-                                      end: const Alignment(0, 1),
-                                      colors: [Colors.black.withOpacity(0), const Color(0xFF111827)],
-                                    ),
-                                  ),
-                                ),
                                 Positioned(
                                   right: 10,
                                   top: 10,
@@ -1740,17 +1707,6 @@ class ProductDetailsView extends StatelessWidget {
                                   height: Responsive.height(11, context),
                                   width: Responsive.width(22, context),
                                   fit: BoxFit.cover,
-                                ),
-                                Container(
-                                  height: Responsive.height(11, context),
-                                  width: Responsive.width(22, context),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: const Alignment(-0.00, -1.00),
-                                      end: const Alignment(0, 1),
-                                      colors: [Colors.black.withOpacity(0), const Color(0xFF111827)],
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),

@@ -70,17 +70,6 @@ class DiscountRestaurantListScreen extends StatelessWidget {
                                           height: Responsive.height(16, context),
                                           width: Responsive.width(28, context),
                                         ),
-                                        Container(
-                                          height: Responsive.height(16, context),
-                                          width: Responsive.width(28, context),
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              begin: const Alignment(-0.00, -1.00),
-                                              end: const Alignment(0, 1),
-                                              colors: [Colors.black.withOpacity(0), const Color(0xFF111827)],
-                                            ),
-                                          ),
-                                        ),
                                         Positioned(
                                           top: 10,
                                           left: 10,

@@ -2475,18 +2475,6 @@ class OfferView extends StatelessWidget {
                               height: Responsive.height(100, context),
                               width: Responsive.width(100, context),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: const Alignment(-0.00, -1.00),
-                                  end: const Alignment(0, 1),
-                                  colors: [
-                                    Colors.black.withOpacity(0),
-                                    AppThemeData.grey900
-                                  ],
-                                ),
-                              ),
-                            ),
                             Positioned(
                               bottom: 5,
                               left: 10,
@@ -3009,9 +2997,6 @@ class StoryView extends StatelessWidget {
                         height: Responsive.height(100, context),
                         width: Responsive.width(100, context),
                       ),
-                      Container(
-                        color: Colors.black.withOpacity(0.30),
-                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 8),
@@ -3291,24 +3276,6 @@ class MapView extends StatelessWidget {
                                                           color: (isOpen)
                                                               ? null
                                                               : Colors.black38,
-                                                          gradient: (isOpen)
-                                                              ? LinearGradient(
-                                                                  begin:
-                                                                      const Alignment(
-                                                                          -0.00,
-                                                                          -1.00),
-                                                                  end:
-                                                                      const Alignment(
-                                                                          0, 1),
-                                                                  colors: [
-                                                                    Colors.black
-                                                                        .withOpacity(
-                                                                            0),
-                                                                    const Color(
-                                                                        0xFF111827)
-                                                                  ],
-                                                                )
-                                                              : null,
                                                         ),
                                                         child: (isOpen)
                                                             ? SizedBox()
