@@ -47,6 +47,7 @@ class VendorModel {
   bool? isSelfDelivery;
   String? packagingCharge;
   int? prepTimeMinutes;
+  bool? autoAcceptOrders;
 
   VendorModel(
       {this.author,
@@ -92,7 +93,8 @@ class VendorModel {
       this.subscriptionTotalOrders,
       this.isSelfDelivery,
       this.packagingCharge,
-      this.prepTimeMinutes});
+      this.prepTimeMinutes,
+      this.autoAcceptOrders});
 
   VendorModel.fromJson(Map<String, dynamic> json) {
     author = json['author'];
@@ -157,6 +159,7 @@ class VendorModel {
     isSelfDelivery = json['isSelfDelivery'] ?? false;
     packagingCharge = json['packagingCharge'] ?? "0";
     prepTimeMinutes = json['prepTimeMinutes'] as int? ?? 15;
+    autoAcceptOrders = json['autoAcceptOrders'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -218,6 +221,7 @@ class VendorModel {
     data['isSelfDelivery'] = isSelfDelivery ?? false;
     data['packagingCharge'] = packagingCharge;
     data['prepTimeMinutes'] = prepTimeMinutes;
+    data['autoAcceptOrders'] = autoAcceptOrders ?? false;
     return data;
   }
 }

@@ -812,6 +812,14 @@ class CartController extends GetxController {
     ShowToastDialog.closeLoader();
     Get.off(const OrderPlacingScreen(), arguments: {"orderModel": orderModel});
 
+    // Auto-accept: if vendor has autoAcceptOrders enabled, accept without restaurant action
+    if (vendorModel.value.autoAcceptOrders == true && orderModel.scheduleTime == null) {
+      FireStoreUtils.fireStore.collection(CollectionName.restaurantOrders).doc(orderModel.id).update({
+        'status': Constant.orderAccepted,
+        'acceptedAt': FieldValue.serverTimestamp(),
+      }).catchError((_) {});
+    }
+
     // Fire-and-forget: notifications and email are non-critical
     Constant.sendOrderEmail(orderModel: orderModel).catchError((_) {});
     FireStoreUtils.getUserProfile(orderModel.vendor!.author.toString()).then((vendorUser) {
