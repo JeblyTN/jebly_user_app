@@ -273,9 +273,10 @@ class CartController extends GetxController {
     }
 
     /// ---------------- COUPON ----------------
+    final bool isDeliveryCoupon = selectedCouponModel.value.id != null && selectedCouponModel.value.applyOn == 'delivery';
     if (selectedCouponModel.value.id != null) {
       couponAmount.value = Constant.calculateDiscount(
-        amount: subTotal.value.toString(),
+        amount: isDeliveryCoupon ? (deliveryCharges.value * surgeMultiplier.value).toString() : subTotal.value.toString(),
         offerModel: selectedCouponModel.value,
       );
     }
@@ -306,7 +307,9 @@ class CartController extends GetxController {
     }
 
     /// ---------------- DISCOUNT RATIO ----------------
-    final totalDiscount = couponAmount.value + specialDiscountAmount.value;
+    // Delivery coupons don't reduce the subtotal, so exclude from order-level discount
+    final double orderCoupon = isDeliveryCoupon ? 0.0 : couponAmount.value;
+    final totalDiscount = orderCoupon + specialDiscountAmount.value;
     double discountRatio = 0.0;
 
     if (subTotal.value > 0 && totalDiscount > 0) {
@@ -385,8 +388,9 @@ class CartController extends GetxController {
     totalTaxAmount.value = productTaxAmount.value + orderTaxAmount.value + driverDeliveryTaxAmount.value + packagingTaxAmount.value + platformTaxAmount.value;
 
     final double effectiveDelivery = deliveryCharges.value * surgeMultiplier.value;
+    final double discountedDelivery = isDeliveryCoupon ? (effectiveDelivery - couponAmount.value).clamp(0.0, double.maxFinite) : effectiveDelivery;
     totalAmount.value =
-        (subTotal.value - totalDiscount) + totalTaxAmount.value + (isEnableFreeDeliveryByAdmin.value ? 0 : effectiveDelivery) + deliveryTips.value + packagingCharge.value + platformFee.value;
+        (subTotal.value - totalDiscount) + totalTaxAmount.value + (isEnableFreeDeliveryByAdmin.value ? 0 : discountedDelivery) + deliveryTips.value + packagingCharge.value + platformFee.value;
 
     getCashback();
   }
@@ -811,6 +815,13 @@ class CartController extends GetxController {
     // Order saved — close loader and navigate immediately
     ShowToastDialog.closeLoader();
     Get.off(const OrderPlacingScreen(), arguments: {"orderModel": orderModel});
+
+    // Increment coupon usage counter
+    if (selectedCouponModel.value.id != null) {
+      FireStoreUtils.fireStore.collection(CollectionName.coupons).doc(selectedCouponModel.value.id).update({
+        'currentUsage': FieldValue.increment(1),
+      }).catchError((_) {});
+    }
 
     // Auto-accept: if vendor has autoAcceptOrders enabled, accept without restaurant action
     if (vendorModel.value.autoAcceptOrders == true && orderModel.scheduleTime == null) {

@@ -836,21 +836,26 @@ class FireStoreUtils {
 
   static Future<List<CouponModel>> getOfferByVendorId(String vendorId) async {
     List<CouponModel> couponList = [];
-    await fireStore
-        .collection(CollectionName.coupons)
-        .where("resturant_id", isEqualTo: vendorId)
-        .where("isEnabled", isEqualTo: true)
-        .where("isPublic", isEqualTo: true)
-        .where('expiresAt', isGreaterThanOrEqualTo: Timestamp.now())
-        .get()
-        .then(
-      (value) {
+    final Set<String> seenIds = {};
+    final now = Timestamp.now();
+    for (final rid in [vendorId, 'all']) {
+      await fireStore
+          .collection(CollectionName.coupons)
+          .where("resturant_id", isEqualTo: rid)
+          .where("isEnabled", isEqualTo: true)
+          .where("isPublic", isEqualTo: true)
+          .where('expiresAt', isGreaterThanOrEqualTo: now)
+          .get()
+          .then((value) {
         for (var element in value.docs) {
-          CouponModel favouriteModel = CouponModel.fromJson(element.data());
-          couponList.add(favouriteModel);
+          CouponModel m = CouponModel.fromJson(element.data());
+          if (m.id != null && !seenIds.contains(m.id)) {
+            seenIds.add(m.id!);
+            couponList.add(m);
+          }
         }
-      },
-    );
+      }).catchError((e) { log(e.toString()); return null; });
+    }
     return couponList;
   }
 
@@ -915,42 +920,50 @@ class FireStoreUtils {
 
   static Future<List<CouponModel>> getAllVendorPublicCoupons(String vendorId) async {
     List<CouponModel> coupon = [];
-
-    await fireStore
-        .collection(CollectionName.coupons)
-        .where("resturant_id", isEqualTo: vendorId)
-        .where('expiresAt', isGreaterThanOrEqualTo: Timestamp.now())
-        .where("isEnabled", isEqualTo: true)
-        .where("isPublic", isEqualTo: true)
-        .get()
-        .then((value) {
-      for (var element in value.docs) {
-        CouponModel taxModel = CouponModel.fromJson(element.data());
-        coupon.add(taxModel);
-      }
-    }).catchError((error) {
-      log(error.toString());
-    });
+    final Set<String> seenIds = {};
+    final now = Timestamp.now();
+    for (final rid in [vendorId, 'all']) {
+      await fireStore
+          .collection(CollectionName.coupons)
+          .where("resturant_id", isEqualTo: rid)
+          .where('expiresAt', isGreaterThanOrEqualTo: now)
+          .where("isEnabled", isEqualTo: true)
+          .where("isPublic", isEqualTo: true)
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          CouponModel m = CouponModel.fromJson(element.data());
+          if (m.id != null && !seenIds.contains(m.id)) {
+            seenIds.add(m.id!);
+            coupon.add(m);
+          }
+        }
+      }).catchError((error) { log(error.toString()); return null; });
+    }
     return coupon;
   }
 
   static Future<List<CouponModel>> getAllVendorCoupons(String vendorId) async {
     List<CouponModel> coupon = [];
-
-    await fireStore
-        .collection(CollectionName.coupons)
-        .where("resturant_id", isEqualTo: vendorId)
-        .where('expiresAt', isGreaterThanOrEqualTo: Timestamp.now())
-        .where("isEnabled", isEqualTo: true)
-        .get()
-        .then((value) {
-      for (var element in value.docs) {
-        CouponModel taxModel = CouponModel.fromJson(element.data());
-        coupon.add(taxModel);
-      }
-    }).catchError((error) {
-      log(error.toString());
-    });
+    final Set<String> seenIds = {};
+    final now = Timestamp.now();
+    for (final rid in [vendorId, 'all']) {
+      await fireStore
+          .collection(CollectionName.coupons)
+          .where("resturant_id", isEqualTo: rid)
+          .where('expiresAt', isGreaterThanOrEqualTo: now)
+          .where("isEnabled", isEqualTo: true)
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          CouponModel m = CouponModel.fromJson(element.data());
+          if (m.id != null && !seenIds.contains(m.id)) {
+            seenIds.add(m.id!);
+            coupon.add(m);
+          }
+        }
+      }).catchError((error) { log(error.toString()); return null; });
+    }
     return coupon;
   }
 

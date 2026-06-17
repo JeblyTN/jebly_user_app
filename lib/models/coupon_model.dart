@@ -11,8 +11,12 @@ class CouponModel {
   bool? isPublic;
   String? resturantId;
   bool? isEnabled;
+  String? applyOn;
+  bool? applyToAll;
+  int? maxUsage;
+  int? currentUsage;
 
-  CouponModel({this.discountType, this.id, this.code, this.discount, this.image, this.expiresAt, this.description, this.isPublic, this.resturantId, this.isEnabled});
+  CouponModel({this.discountType, this.id, this.code, this.discount, this.image, this.expiresAt, this.description, this.isPublic, this.resturantId, this.isEnabled, this.applyOn, this.applyToAll, this.maxUsage, this.currentUsage});
 
   CouponModel.fromJson(Map<String, dynamic> json) {
     discountType = json['discountType'];
@@ -25,6 +29,10 @@ class CouponModel {
     isPublic = json['isPublic'];
     resturantId = json['resturant_id'];
     isEnabled = json['isEnabled'];
+    applyOn = json['applyOn'] ?? 'order';
+    applyToAll = json['applyToAll'] ?? false;
+    maxUsage = (json['maxUsage'] as num?)?.toInt() ?? 0;
+    currentUsage = (json['currentUsage'] as num?)?.toInt() ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +47,10 @@ class CouponModel {
     data['isPublic'] = isPublic;
     data['resturant_id'] = resturantId;
     data['isEnabled'] = isEnabled;
+    data['applyOn'] = applyOn ?? 'order';
+    data['applyToAll'] = applyToAll ?? false;
+    data['maxUsage'] = maxUsage ?? 0;
+    data['currentUsage'] = currentUsage ?? 0;
     return data;
   }
 }

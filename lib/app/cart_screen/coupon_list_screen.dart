@@ -49,9 +49,13 @@ class CouponListScreen extends StatelessWidget {
                         onTap: () {
                           if (controller.allCouponList.where((p0) => p0.code!.toLowerCase() == controller.couponCodeController.value.text.toLowerCase()).isNotEmpty) {
                             CouponModel element = controller.allCouponList.firstWhere((p0) => p0.code!.toLowerCase() == controller.couponCodeController.value.text.toLowerCase());
-                            controller.selectedCouponModel.value = element;
-                            controller.calculatePrice();
-                            Get.back();
+                            if ((element.maxUsage ?? 0) > 0 && (element.currentUsage ?? 0) >= (element.maxUsage ?? 0)) {
+                              ShowToastDialog.showToast("Coupon usage limit reached".tr);
+                            } else {
+                              controller.selectedCouponModel.value = element;
+                              controller.calculatePrice();
+                              Get.back();
+                            }
                           } else {
                             ShowToastDialog.showToast("Invalid Coupon".tr);
                           }
@@ -149,6 +153,10 @@ class CouponListScreen extends StatelessWidget {
                                     )),
                                     InkWell(
                                       onTap: () {
+                                        if ((couponModel.maxUsage ?? 0) > 0 && (couponModel.currentUsage ?? 0) >= (couponModel.maxUsage ?? 0)) {
+                                          ShowToastDialog.showToast("Coupon usage limit reached".tr);
+                                          return;
+                                        }
                                         double couponAmount = Constant.calculateDiscount(amount: controller.subTotal.value.toString(), offerModel: couponModel);
 
                                         if (couponAmount < controller.subTotal.value) {
