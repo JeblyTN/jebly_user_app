@@ -10,7 +10,8 @@
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label"
         android:enableOnBackInvokedCallback="true"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:extractNativeLibs="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
