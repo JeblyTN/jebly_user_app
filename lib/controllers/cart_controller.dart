@@ -728,7 +728,11 @@ class CartController extends GetxController {
     orderModel.specialDiscount = specialDiscountMap;
     orderModel.couponCode = selectedCouponModel.value.code;
     orderModel.baseDeliveryFee = deliveryCharges.value.toString();
-    orderModel.deliveryCharge = (deliveryCharges.value * surgeMultiplier.value).toString();
+    final double effDelivery = deliveryCharges.value * surgeMultiplier.value;
+    final bool applyCouponOnDelivery = selectedCouponModel.value.id != null && selectedCouponModel.value.applyOn == 'delivery';
+    orderModel.deliveryCharge = applyCouponOnDelivery
+        ? (effDelivery - couponAmount.value).clamp(0.0, double.maxFinite).toString()
+        : effDelivery.toString();
     if (surgeActive.value && surgeMultiplier.value > 1.0) {
       orderModel.surgeMultiplier = surgeMultiplier.value;
     }
@@ -824,12 +828,12 @@ class CartController extends GetxController {
       }).catchError((_) {});
     }
 
-    // Auto-accept: if vendor has autoAcceptOrders enabled, accept without restaurant action
+    // Auto-accept: if vendor has autoAcceptOrders enabled, accept and dispatch a driver
     if (vendorModel.value.autoAcceptOrders == true && orderModel.scheduleTime == null) {
       FireStoreUtils.fireStore.collection(CollectionName.restaurantOrders).doc(orderModel.id).update({
         'status': Constant.orderAccepted,
         'acceptedAt': FieldValue.serverTimestamp(),
-      }).catchError((_) {});
+      }).then((_) => _dispatchDriverForOrder(orderModel)).catchError((_) {});
     }
 
     // Fire-and-forget: notifications and email are non-critical
@@ -843,6 +847,83 @@ class CartController extends GetxController {
         }
       }
     }).catchError((_) {});
+  }
+
+  Future<void> _dispatchDriverForOrder(OrderModel orderModel) async {
+    try {
+      final settingsSnap = await FireStoreUtils.fireStore.collection(CollectionName.settings).doc('DriverNearBy').get();
+      if (!settingsSnap.exists) return;
+      final settings = settingsSnap.data()!;
+
+      final int minDeposit = int.tryParse(settings['minimumDepositToRideAccept']?.toString() ?? '0') ?? 0;
+      final double radiusKm = double.tryParse(settings['driverRadios']?.toString() ?? '50') ?? 50.0;
+      final bool isMiles = (settings['distanceType']?.toString() ?? 'km') == 'miles';
+      final double effectiveRadius = isMiles ? radiusKm * 1.60934 : radiusKm;
+      final bool singleOrderReceive = settings['singleOrderReceive'] as bool? ?? false;
+
+      final List<String> rejected = List<String>.from(orderModel.rejectedByDrivers ?? []);
+
+      Query<Map<String, dynamic>> query = FireStoreUtils.fireStore
+          .collection(CollectionName.users)
+          .where('role', isEqualTo: 'driver')
+          .where('isActive', isEqualTo: true);
+
+      if (minDeposit > 0) {
+        query = query.where('wallet_amount', isGreaterThanOrEqualTo: minDeposit);
+      }
+
+      final driversSnap = await query.get();
+
+      String? chosenDriverId;
+      List<dynamic> chosenDriverOrders = [];
+
+      for (final doc in driversSnap.docs) {
+        final driver = doc.data();
+        if (driver['fcmToken'] == null || driver['fcmToken'].toString().isEmpty) continue;
+        if ((driver['vendorID']?.toString() ?? '').isNotEmpty) continue;
+        if (rejected.contains(doc.id)) continue;
+        if (singleOrderReceive) {
+          final existing = driver['orderRequestData'];
+          if (existing is List && existing.isNotEmpty) continue;
+        }
+        if (driver['location'] != null && orderModel.vendor != null) {
+          final driverLat = (driver['location']['latitude'] as num).toDouble();
+          final driverLng = (driver['location']['longitude'] as num).toDouble();
+          final dist = _haversineKm(driverLat, driverLng, orderModel.vendor!.latitude ?? 0.0, orderModel.vendor!.longitude ?? 0.0);
+          if (dist > effectiveRadius) continue;
+        }
+        chosenDriverId = doc.id;
+        chosenDriverOrders = List<dynamic>.from(driver['orderRequestData'] ?? []);
+        break;
+      }
+
+      if (chosenDriverId == null) return;
+
+      if (singleOrderReceive) {
+        chosenDriverOrders = [orderModel.id];
+      } else {
+        if (!chosenDriverOrders.contains(orderModel.id)) chosenDriverOrders.add(orderModel.id);
+      }
+
+      await FireStoreUtils.fireStore.collection(CollectionName.restaurantOrders).doc(orderModel.id).update({
+        'status': Constant.driverPending,
+        'triggerDelivery': FieldValue.serverTimestamp(),
+      });
+
+      await FireStoreUtils.fireStore.collection(CollectionName.users).doc(chosenDriverId).update({
+        'orderRequestData': chosenDriverOrders,
+      });
+    } catch (e) {
+      log('Driver dispatch failed: $e');
+    }
+  }
+
+  double _haversineKm(double lat1, double lng1, double lat2, double lng2) {
+    const double toRad = maths.pi / 180;
+    final double sinDLat = maths.sin((lat2 - lat1) * toRad / 2);
+    final double sinDLng = maths.sin((lng2 - lng1) * toRad / 2);
+    final double a = sinDLat * sinDLat + maths.cos(lat1 * toRad) * maths.cos(lat2 * toRad) * sinDLng * sinDLng;
+    return 6371.0 * 2 * maths.asin(maths.sqrt(a));
   }
 
   Rx<WalletSettingModel> walletSettingModel = WalletSettingModel().obs;
