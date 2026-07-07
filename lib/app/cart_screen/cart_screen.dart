@@ -737,34 +737,6 @@ class CartScreen extends StatelessWidget {
 
                                       sectionDivider(themeChange.getThem()),
 
-                                      // Surge banner
-                                      if (controller.surgeActive.value && controller.selectedFoodType.value != 'TakeAway')
-                                        Container(
-                                          margin: const EdgeInsets.only(bottom: 8),
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFFFF3CD),
-                                            borderRadius: BorderRadius.circular(8),
-                                            border: Border.all(color: const Color(0xFFF7A800)),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Text('⚡', style: TextStyle(fontSize: 16)),
-                                              const SizedBox(width: 6),
-                                              Expanded(
-                                                child: Text(
-                                                  '${controller.surgeLabel.value} — frais de livraison majorés (×${controller.surgeMultiplier.value.toStringAsFixed(1)})',
-                                                  style: const TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0xFF856404),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
                                       /// Delivery Fee
                                       if (controller.selectedFoodType.value != 'TakeAway')
                                         amountRow(
