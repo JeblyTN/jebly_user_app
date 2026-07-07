@@ -24,15 +24,16 @@ class CouponModel {
     code = json['code'];
     discount = json['discount'];
     image = json['image'];
-    expiresAt = json['expiresAt'];
+    final rawExpiry = json['expiresAt'];
+    expiresAt = rawExpiry is Timestamp ? rawExpiry : null;
     description = json['description'];
     isPublic = json['isPublic'];
     resturantId = json['resturant_id'];
     isEnabled = json['isEnabled'];
     applyOn = json['applyOn'] ?? 'order';
     applyToAll = json['applyToAll'] ?? false;
-    maxUsage = (json['maxUsage'] as num?)?.toInt() ?? 0;
-    currentUsage = (json['currentUsage'] as num?)?.toInt() ?? 0;
+    maxUsage = int.tryParse(json['maxUsage']?.toString() ?? '0') ?? 0;
+    currentUsage = int.tryParse(json['currentUsage']?.toString() ?? '0') ?? 0;
   }
 
   Map<String, dynamic> toJson() {
