@@ -236,7 +236,7 @@ const Map<String, String> trFR = {
   "Large Discounts": "Grandes remises",
   "Save Upto 50% Off": "Économisez jusqu'à 50% de réduction",
   "Stories": "Histoires",
-  "Best Food Stories Ever": "Les meilleures histoires culinaires",
+  "Best Food Stories Ever": "Les meilleures stories",
   "Best Restaurants": "Meilleurs restaurants",
   "Do you really want to change the delivery option? Your cart will be empty.": "Voulez-vous vraiment changer l'option de livraison ? Votre panier sera vidé.",
   "Alert": "Alerte",
