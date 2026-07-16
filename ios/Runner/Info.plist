@@ -47,20 +47,20 @@
 			<true />
 		</dict>
 		<key>NSCameraUsageDescription</key>
-		<string>This app needs access to camera permission</string>
+		<string>Jebly utilise votre appareil photo pour vous permettre de prendre une photo de profil et de partager des images de vos commandes.</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-		<string>This app needs access to location when open and in the background.</string>
+		<string>Jebly utilise votre position pour afficher les restaurants à proximité, estimer les temps de livraison et permettre aux livreurs de vous localiser pour la livraison de votre commande.</string>
 		<key>NSLocationAlwaysUsageDescription</key>
-		<string>This app needs access to location when in the background.</string>
+		<string>Jebly utilise votre position en arrière-plan pour suivre votre commande en temps réel et permettre aux livreurs de vous localiser pour la livraison.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>This app needs access to location when open.</string>
+		<string>Jebly utilise votre position pour afficher les restaurants à proximité, estimer les temps de livraison et permettre aux livreurs de vous localiser pour la livraison de votre commande.</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>Used to capture audio for image picker plugin</string>
+		<string>Jebly utilise le microphone pour les appels vocaux avec le support client et les livreurs.</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
 		<string>This app uses speech recognition to convert your speech into text for searching
 			restaurants and products.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>This app needs access to your gallery photo.</string>
+		<string>Jebly accède à votre galerie de photos pour vous permettre de choisir une photo de profil.</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true />
 		<key>UIBackgroundModes</key>

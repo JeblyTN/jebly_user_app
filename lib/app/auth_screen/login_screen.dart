@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:customer/app/auth_screen/phone_number_screen.dart';
 import 'package:customer/app/auth_screen/signup_screen.dart';
 import 'package:customer/app/dash_board_screens/dash_board_screen.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -211,6 +214,19 @@ class LoginScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 12),
+                    if (Platform.isIOS)
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: SignInWithAppleButton(
+                          onPressed: () async {
+                            controller.loginWithApple();
+                          },
+                          style: SignInWithAppleButtonStyle.black,
+                          text: "Continuer avec Apple",
+                        ),
+                      ),
+                    if (Platform.isIOS) const SizedBox(height: 12),
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: AppThemeData.primary300, width: 1.5),
